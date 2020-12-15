@@ -1,0 +1,17 @@
+2020-12-14 20:41: DEBUG: First Customer's address has been set.
+2020-12-14 20:41: DEBUG: First Customer's saving account(111014) is now active.
+2020-12-14 20:41: DEBUG: Deposit for account 111014. Balance is 100.
+2020-12-14 20:41: DEBUG: Insufficient funds for withdrawal for account 111014.
+2020-12-14 20:41: DEBUG: Withdrawal for account 111014. New balance is 50.
+2020-12-14 20:41: DEBUG: Accrual is done for account 111014. Balance is 70.0.
+2020-12-14 20:45: DEBUG: First Customer's address has been set.
+2020-12-14 20:45: DEBUG: Employee(513) has been hired.
+2020-12-14 20:45: DEBUG: First Customer's address has been set.
+2020-12-14 20:46: DEBUG: Attempt to hire an existing employee with ssn 789909.
+2020-12-14 20:46: DEBUG: First Customer's address has been set.
+2020-12-14 20:46: DEBUG: Employee(637) has been hired.
+2020-12-14 20:46: DEBUG: First Customer's address has been set.
+2020-12-14 21:03: DEBUG: Attempt to hire an existing employee with ssn 1234990.
+2020-12-14 21:03: DEBUG: First Customer's address has been set.
+2020-12-14 21:03: DEBUG: Employee(500) has been hired.
+2020-12-14 21:03: DEBUG: First Customer's address has been set.
