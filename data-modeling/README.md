@@ -6,7 +6,7 @@
 
 ## Part One: Medical Center
 
-> Design the schema for a medical center.
+Design the schema for a medical center.
 
 * A medical center employs several doctors
 * A doctors can see many patients
@@ -14,11 +14,11 @@
 * During a visit, a patient may be diagnosed to have one or more diseases.
 
 > ERD for Medical Center is below:
-![ERD for Medical Center]('data\\Medical.jpeg')
+![ERD for Medical Center](data/Medical.jpeg)
 
 ## Part Two: Craigslist
 
-> Design the schema for Craigslist.
+Design the schema for Craigslist.
 
 * The region of the craigslist post (San Francisco, Atlanta, Seattle, etc)
 * Users and preferred region
