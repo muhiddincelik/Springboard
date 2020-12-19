@@ -14,7 +14,7 @@ Design the schema for a medical center.
 * During a visit, a patient may be diagnosed to have one or more diseases.
 
 **[>>DDL sql file for Medical Center<<](ddl_sql/Medical_Center_DDL.sql)**  
-**ERD for Medical Center is below:**   
+  **ERD for Medical Center is below:**   
 ![ERD for Medical Center](docs/Medical.jpeg)
 
 ## Part Two: Craigslist
@@ -27,7 +27,7 @@ Design the schema for Craigslist.
 * Categories that each post belongs to
 
 **[>>DDL sql file for Medical Center<<](ddl_sql/Craigslist_DDL.sql)**   
-**ERD for Craigslist is below:**   
+  **ERD for Craigslist is below:**   
 ![ERD for Craigslist](docs/Craigslist.jpeg)
 
 ## Part Three: Soccer League
@@ -43,5 +43,5 @@ Design a schema for a simple sports league.
 * The standings/rankings of each team in the league (This doesn’t have to be its own table if the data can be captured somehow).
 
 **[>>DDL sql file for Soccer League<<](ddl_sql/Soccer_League_DDL.sql)**   
-**ERD for Soccer League is below:**
+  **ERD for Soccer League is below:**
 ![ERD for Soccer League](docs/Soccer.jpeg)
