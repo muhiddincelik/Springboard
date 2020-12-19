@@ -14,7 +14,7 @@ Design the schema for a medical center.
 * During a visit, a patient may be diagnosed to have one or more diseases.
 
 > ERD for Medical Center is below:
-![ERD for Medical Center](data/Medical.jpeg)
+![ERD for Medical Center](docs/Medical.jpeg)
 
 ## Part Two: Craigslist
 
