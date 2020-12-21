@@ -9,20 +9,45 @@
 UML Class Diagram of the program resides in **[docs](docs)** folder, and it is also shown below:
 ![UML Class Diagram for Banking Program](docs/Banking_UML_Class.jpeg)
 
-## Part Two: How to Create Service Instances
+## Part Two: How to Create Class Instances    
 
 Examples to show initializing class objects and using methods if applicable.
-- 
+**1) Employee Instance**
+**2) Checking Account Instance**
+**3) Saving Account Instance**
+**4) Credit Card Instance**
+
+credit_card_instance = CreditCard(ssn: int, first_name: str, last_name: str, address: str, limit: int)
+
+**Note:** SSN argument should be an int with 9 digits.
+
+After credit card instance created, the data about the credit card is saved to **[credit_card.csv](data/credit_card.csv)**.
+Example entries for credit_card.csv is shown below:
+
+| index | ssn       | credit_card_number |  limit |  expiration_date |  cvc |
+|-------|-----------|--------------------|--------|------------------|------|
+| 0     | 112233445 | 4234567890125150   | 1000   | 12-23            | 124  |
+| 1     | 123412345 | 4234567890126800   | 900    | 12-23            | 168  |
+
+If methods of credit card class is used, the transaction data is saved to **[credit_card_transactions.csv](data/credit_card_transactions.csv)**.
+Example entries for credit_card_transactions.csv is shown below:
+
+| index | account_number   | transaction_type | amount |
+|-------|------------------|------------------|--------|
+| 0     | 4234567890125150 | Credit           | 100    |
+| 1     | 4234567890125440 | Debit            | -500   |
+
+**5) Loan Instance**
 
 
 
 
 ## Part Three: Logging
 
-For logging, the program utilizes the yaml log config file **[yaml log config file](docs/check.logging.yml)** which resides in **[docs](docs)** folder. Logger writes messages to both screen and **check.log** file in the **[logs](logs)** folder. Following events are logged:
+For logging, the program utilizes the **[yaml log config file](docs/check.logging.yml)** which resides in **[docs](docs)** folder. Logger writes messages to both screen and **[check.log](logs/check.log)** file in the **[logs](logs)** folder. Following events are logged:
 
 * Creating an employee, saving, checking, credit card or loan instance successfully
-* Attempt to create another employee, saving, checking, credit card or loan instance for a given ssn
+* Attempt to create another employee, saving, checking, credit card or loan instance for a given SSN
 * Succesfully executing deposit method for saving and checking instances
 * Succesfully executing withdraw method for saving and checking instances
 * Insufficient funds to execute withdraw method for saving and checking classes

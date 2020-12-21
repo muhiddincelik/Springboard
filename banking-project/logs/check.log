@@ -237,3 +237,9 @@
 2020-12-20 18:18: DEBUG: d d's loan (file_number: 3942) has been approved.
 2020-12-20 18:20: DEBUG: m d's credit card (4234567890126470) is now active.
 2020-12-20 18:59: DEBUG: a b's credit card (4234567890126131) is now active.
+2020-12-20 23:41: DEBUG: Tubis Cello's loan (file_number: 4888) has been approved.
+2020-12-20 23:42: DEBUG: Excess payment for loan 4888. Please pay $1000000 or less.
+2020-12-20 23:42: DEBUG: Pay off for loan 4888. Total amortized balance is 1000000.
+2020-12-20 23:42: DEBUG: Loan 4888 has been closed.
+2020-12-20 23:44: DEBUG: Tubi Zengo's credit card (4234567890126711) is now active.
+2020-12-20 23:44: DEBUG: Pay off for credit card 4234567890126711. Current balance is -200.
