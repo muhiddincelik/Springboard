@@ -12,32 +12,43 @@ UML Class Diagram of the program resides in **[docs](docs)** folder, and it is a
 ## Part Two: How to Create Class Instances    
 
 Examples to show initializing class objects and using methods if applicable.
-**1) Employee Instance**
-**2) Checking Account Instance**
-**3) Saving Account Instance**
-**4) Credit Card Instance**
+###1) Employee Instance###
 
-credit_card_instance = CreditCard(ssn: int, first_name: str, last_name: str, address: str, limit: int)
+###2) Checking Account Instance###  
+
+###3) Saving Account Instance###  
+
+###4) Credit Card Instance###
+
+**Creating a credit card instance:**
+
+***credit_card_instance = CreditCard(ssn: int, first_name: str, last_name: str, address: str, limit: int)***
 
 **Note:** SSN argument should be an int with 9 digits.
 
 After credit card instance created, the data about the credit card is saved to **[credit_card.csv](data/credit_card.csv)**.
-Example entries for credit_card.csv is shown below:
+Example entries for credit_card.csv are shown below:
 
 | index | ssn       | credit_card_number |  limit |  expiration_date |  cvc |
 |-------|-----------|--------------------|--------|------------------|------|
 | 0     | 112233445 | 4234567890125150   | 1000   | 12-23            | 124  |
 | 1     | 123412345 | 4234567890126800   | 900    | 12-23            | 168  |
 
-If methods of credit card class is used, the transaction data is saved to **[credit_card_transactions.csv](data/credit_card_transactions.csv)**.
-Example entries for credit_card_transactions.csv is shown below:
+**Calling credit card methods on credit_card_instance:**
+
+***credit_card_instance.pay_off(amount: Int)*** (Decreases credit_card_instance's balance attribute by 'amount'.)
+***credit_card_instance.purchase(amount: Int)*** (Increases credit_card_instance's balance attribute by 'amount'.)
+***del credit_card_instance*** (Deletes credit_card_instance and removes the related entry from credit_card.csv.)
+
+If 'pay_off' or 'purchase' methods of credit card class are used, the transaction data is saved to **[credit_card_transactions.csv](data/credit_card_transactions.csv)**.
+Example entries for credit_card_transactions.csv are shown below:
 
 | index | account_number   | transaction_type | amount |
 |-------|------------------|------------------|--------|
 | 0     | 4234567890125150 | Credit           | 100    |
 | 1     | 4234567890125440 | Debit            | -500   |
 
-**5) Loan Instance**
+###5) Loan Instance###
 
 
 
