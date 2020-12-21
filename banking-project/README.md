@@ -12,13 +12,13 @@ UML Class Diagram of the program resides in **[docs](docs)** folder, and it is a
 ## Part Two: How to Create Class Instances    
 
 Examples to show initializing class objects and using methods if applicable.
-###1) Employee Instance###
+### 1) Employee Instance ###  
 
-###2) Checking Account Instance###  
+### 2) Checking Account Instance ###  
 
-###3) Saving Account Instance###  
+### 3) Saving Account Instance ###  
 
-###4) Credit Card Instance###
+### 4) Credit Card Instance ### 
 
 **Creating a credit card instance:**
 
@@ -48,7 +48,7 @@ Example entries for credit_card_transactions.csv are shown below:
 | 0     | 4234567890125150 | Credit           | 100    |
 | 1     | 4234567890125440 | Debit            | -500   |
 
-###5) Loan Instance###
+### 5) Loan Instance ###
 
 
 
