@@ -15,3 +15,225 @@
 2020-12-14 21:03: DEBUG: First Customer's address has been set.
 2020-12-14 21:03: DEBUG: Employee(500) has been hired.
 2020-12-14 21:03: DEBUG: First Customer's address has been set.
+2020-12-15 12:26: DEBUG: CreditCard Customer's address has been set.
+2020-12-15 12:26: DEBUG: CreditCard Customer's credit card (ssn: 2342348) is now active.
+2020-12-15 12:26: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 12:26: DEBUG: Pay off for credit card 4234567890126999. Current balance is 50.
+2020-12-15 12:26: DEBUG: Insufficient limit to make purchase for credit card 4234567890126999.
+2020-12-15 12:37: DEBUG: CreditCard Customer's address has been set.
+2020-12-15 12:37: DEBUG: CreditCard Customer's credit card (ssn: 12345) is now active.
+2020-12-15 12:37: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 12:37: DEBUG: Pay off for credit card 4234567890126999. Current balance is 50.
+2020-12-15 12:37: DEBUG: Insufficient limit to make purchase for credit card 4234567890126999.
+2020-12-15 12:59: DEBUG: CreditCard2 Customer's address has been set.
+2020-12-15 12:59: DEBUG: CreditCard2 Customer's credit card (ssn: 45578) is now active.
+2020-12-15 12:59: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 12:59: DEBUG: Pay off for credit card 4234567890126999. Current balance is -50.
+2020-12-15 12:59: DEBUG: Insufficient limit to make purchase for credit card 4234567890126999.
+2020-12-15 12:59: DEBUG: CreditCard3 Customer's address has been set.
+2020-12-15 12:59: DEBUG: CreditCard3 Customer's credit card (ssn: 7890) is now active.
+2020-12-15 12:59: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 12:59: DEBUG: Pay off for credit card 4234567890126999. Current balance is -50.
+2020-12-15 12:59: DEBUG: Purchase on credit card 4234567890126999. New balance is 1000.
+2020-12-15 13:05: DEBUG: CreditCard3 Customer's address has been set.
+2020-12-15 13:05: DEBUG: CreditCard3 Customer's credit card (ssn: 996970707) is now active.
+2020-12-15 13:05: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 13:05: DEBUG: Pay off for credit card 4234567890126999. Current balance is -50.
+2020-12-15 13:05: DEBUG: Purchase on credit card 4234567890126999. New balance is 1000.
+2020-12-15 14:22: DEBUG: Loan1 Customer's address has been set.
+2020-12-15 14:22: DEBUG: Loan1 Customer's loan (ssn: 996970707) has been approved.
+2020-12-15 14:22: DEBUG: Pay off for loan 4999. Total amortized balance is 100.
+2020-12-15 14:22: DEBUG: Excess payment for loan 4999. Please pay $900 or less.
+2020-12-15 14:22: DEBUG: Pay off for loan 4999. Total amortized balance is 1000.
+2020-12-15 14:23: DEBUG: Attempt to get additional loan with ssn 996970707.
+2020-12-15 14:23: DEBUG: Loan2 Customer's address has been set.
+2020-12-15 14:23: DEBUG: Loan2 Customer's loan (ssn: 3445690) has been approved.
+2020-12-15 14:23: DEBUG: Pay off for loan 4999. Total amortized balance is 100.
+2020-12-15 14:23: DEBUG: Excess payment for loan 4999. Please pay $900 or less.
+2020-12-15 14:23: DEBUG: Pay off for loan 4999. Total amortized balance is 1000.
+2020-12-15 14:23: DEBUG: Loan 4999 has been closed.
+2020-12-15 14:25: DEBUG: Loan2 Customer's address has been set.
+2020-12-15 14:25: DEBUG: Loan2 Customer's loan (ssn: 3445690) has been approved.
+2020-12-15 14:25: DEBUG: Pay off for loan 4999. Total amortized balance is 100.
+2020-12-15 14:25: DEBUG: Excess payment for loan 4999. Please pay $900 or less.
+2020-12-15 14:25: DEBUG: Pay off for loan 4999. Total amortized balance is 1000.
+2020-12-15 14:25: DEBUG: Loan 4999 has been closed.
+2020-12-15 14:27: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 14:27: DEBUG: Loan3 Customer's loan (file_number: 4999) has been approved.
+2020-12-15 14:27: DEBUG: Pay off for loan 4999. Total amortized balance is 100.
+2020-12-15 14:27: DEBUG: Excess payment for loan 4999. Please pay $900 or less.
+2020-12-15 14:27: DEBUG: Pay off for loan 4999. Total amortized balance is 1000.
+2020-12-15 14:27: DEBUG: Loan 4999 has been closed.
+2020-12-15 14:34: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 14:34: DEBUG: Loan3 Customer's credit card (ssn: 69030) is now active.
+2020-12-15 14:34: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is 0.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is -1500.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is -2400.
+2020-12-15 14:34: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 14:34: DEBUG: Loan3 Customer's credit card (ssn: 12389) is now active.
+2020-12-15 14:34: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is 0.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is -1500.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is -2400.
+2020-12-15 14:34: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 14:34: DEBUG: Loan3 Customer's credit card (ssn: 234890) is now active.
+2020-12-15 14:34: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is 0.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is -1500.
+2020-12-15 14:34: DEBUG: Pay off for credit card 4234567890126999. Current balance is -2400.
+2020-12-15 20:38: DEBUG: Attempt to get additional credit card with ssn 234890.
+2020-12-15 20:38: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:38: DEBUG: Loan3 Customer's credit card (ssn: 8972349) is now active.
+2020-12-15 20:38: DEBUG: Purchase on credit card 4234567890126999. New balance is 100.
+2020-12-15 20:38: DEBUG: Pay off for credit card 4234567890126999. Current balance is 0.
+2020-12-15 20:38: DEBUG: Pay off for credit card 4234567890126999. Current balance is -1500.
+2020-12-15 20:38: DEBUG: Pay off for credit card 4234567890126999. Current balance is -2400.
+2020-12-15 20:39: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:39: DEBUG: Loan3 Customer's saving account(151780) is now active.
+2020-12-15 20:39: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:39: DEBUG: Loan3 Customer's saving account(173305) is now active.
+2020-12-15 20:40: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:40: DEBUG: Loan3 Customer's saving account(164808) is now active.
+2020-12-15 20:40: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:40: DEBUG: Loan3 Customer's loan (file_number: 4999) has been approved.
+2020-12-15 20:41: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:41: DEBUG: Loan3 Customer's loan (file_number: 4999) has been approved.
+2020-12-15 20:43: DEBUG: Attempt to get additional loan with ssn 5678789.
+2020-12-15 20:43: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:43: DEBUG: Loan3 Customer's loan (file_number: 3730) has been approved.
+2020-12-15 20:44: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:44: DEBUG: Loan3 Customer's credit card (ssn: 56778) is now active.
+2020-12-15 20:45: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:45: DEBUG: Loan3 Customer's credit card (ssn: 12323557) is now active.
+2020-12-15 20:45: DEBUG: Loan3 Customer's address has been set.
+2020-12-15 20:45: DEBUG: Loan3 Customer's credit card (ssn: 87990456) is now active.
+2020-12-15 21:48: DEBUG: Attempt to get additional credit card with ssn 87990456.
+2020-12-15 21:49: DEBUG: Max Customer's address has been set.
+2020-12-15 21:49: DEBUG: Max Customer's credit card (ssn: 879904512) is now active.
+2020-12-15 21:57: DEBUG: Max Customer's address has been set.
+2020-12-15 22:09: DEBUG: Max Customer's address has been set.
+2020-12-15 22:09: DEBUG: Max Customer's loan (file_number: 4934) has been approved.
+2020-12-15 22:09: DEBUG: Max Customer's address has been set.
+2020-12-15 22:09: DEBUG: Max Customer's loan (file_number: 4076) has been approved.
+2020-12-19 10:50: DEBUG: Attempt to get additional loan with ssn 871704512.
+2020-12-19 10:50: DEBUG: Max Customer's address has been set.
+2020-12-19 10:50: DEBUG: Max Customer's loan (file_number: 4408) has been approved.
+2020-12-19 10:56: DEBUG: Max Customer's loan (file_number: 3425) has been approved.
+2020-12-19 10:56: DEBUG: Attempt to get additional loan with ssn 923457204.
+2020-12-19 10:57: DEBUG: Attempt to get additional loan with ssn 923457204.
+2020-12-19 10:57: DEBUG: Max Customer's loan (file_number: 3183) has been approved.
+2020-12-19 11:00: DEBUG: Max Customer's address has been set.
+2020-12-19 11:00: DEBUG: Max Customer's loan (file_number: 4672) has been approved.
+2020-12-19 11:00: DEBUG: Max Customer's address has been set.
+2020-12-19 11:07: DEBUG: Max Customer's address has been set.
+2020-12-19 11:07: DEBUG: Max Customer's credit card (4234567890125493) is now active.
+2020-12-19 11:07: DEBUG: Credit card 4234567890125493 has been closed.
+2020-12-19 11:19: DEBUG: Emp Emp's address has been set.
+2020-12-19 16:37: DEBUG: George Lucas's address has been set.
+2020-12-19 16:37: DEBUG: George Lucas's checking account(115517) is now active.
+2020-12-19 16:55: DEBUG: Jack Nelson's address has been set.
+2020-12-19 16:55: DEBUG: Jack Nelson's checking account(112486) is now active.
+2020-12-19 16:55: DEBUG: Deposit for account 112486. Balance is 500.
+2020-12-19 17:04: DEBUG: July Brannan's address has been set.
+2020-12-19 17:04: DEBUG: July Brannan's checking account(132518) is now active.
+2020-12-19 17:05: DEBUG: Insufficient funds for withdrawal for account 132518.
+2020-12-19 17:09: DEBUG: Micheal Jack's address has been set.
+2020-12-19 17:09: DEBUG: Micheal Jack's checking account(110885) is now active.
+2020-12-19 17:09: DEBUG: Insufficient funds for withdrawal for account 110885.
+2020-12-19 17:29: DEBUG: Melaine Blaire's address has been set.
+2020-12-19 17:29: DEBUG: Melaine Blaire's saving account(134022) is now active.
+2020-12-19 17:29: DEBUG: Deposit for account 134022. Balance is 1200.
+2020-12-19 17:31: DEBUG: Attempt to open duplicate saving account with ssn 999666333.
+2020-12-19 18:30: DEBUG: A B's address has been set.
+2020-12-19 18:30: DEBUG: A B's loan (file_number: 4506) has been approved.
+2020-12-19 18:31: DEBUG: Attempt to get additional loan with ssn 111222333.
+2020-12-19 18:32: DEBUG: a b's address has been set.
+2020-12-19 18:32: DEBUG: a b's loan (file_number: 4484) has been approved.
+2020-12-19 18:32: DEBUG: Pay off for loan 4484. Total amortized balance is 2000.
+2020-12-19 18:32: DEBUG: Loan 4484 has been closed.
+2020-12-19 18:46: DEBUG: a j's address has been set.
+2020-12-19 18:46: DEBUG: a j's credit card (4234567890125158) is now active.
+2020-12-19 18:46: DEBUG: Pay off for credit card 4234567890125158. Current balance is -100.
+2020-12-19 18:49: DEBUG: Metin Celik's address has been set.
+2020-12-19 18:49: DEBUG: Metin Celik's saving account(155602) is now active.
+2020-12-19 18:49: DEBUG: Deposit for account 155602. Balance is 1000.
+2020-12-19 18:53: DEBUG: A M's address has been set.
+2020-12-19 18:53: DEBUG: A M's saving account(164147) is now active.
+2020-12-19 19:04: DEBUG: a 's address has been set.
+2020-12-19 19:04: DEBUG: a 's credit card (4234567890126803) is now active.
+2020-12-19 19:07: DEBUG: a b's address has been set.
+2020-12-19 19:07: DEBUG: a b's credit card (4234567890125421) is now active.
+2020-12-19 19:13: DEBUG: a j's address has been set.
+2020-12-19 19:13: DEBUG: a j's credit card (4234567890126001) is now active.
+2020-12-19 19:14: DEBUG: a k's address has been set.
+2020-12-19 19:14: DEBUG: a k's credit card (4234567890126042) is now active.
+2020-12-19 19:17: DEBUG: m l's address has been set.
+2020-12-19 19:18: DEBUG: m l's credit card (4234567890125583) is now active.
+2020-12-20 12:42: DEBUG: a j's address has been set.
+2020-12-20 12:43: DEBUG: a j's address has been set.
+2020-12-20 12:44: DEBUG: a k's address has been set.
+2020-12-20 12:44: DEBUG: a k's saving account(124765) is now active.
+2020-12-20 12:44: DEBUG: Deposit for account 124765. Balance is 1256.
+2020-12-20 12:51: DEBUG: a j's address has been set.
+2020-12-20 12:51: DEBUG: a j's checking account(111774) is now active.
+2020-12-20 12:53: DEBUG: a j's address has been set.
+2020-12-20 12:53: DEBUG: a j's saving account(130586) is now active.
+2020-12-20 12:54: DEBUG: Deposit for account 130586. Balance is 100.
+2020-12-20 13:13: DEBUG: a h's checking account(149022) is now active.
+2020-12-20 13:13: DEBUG: Deposit for account 149022. Balance is 345.
+2020-12-20 14:41: DEBUG: a d's saving account(155089) is now active.
+2020-12-20 14:42: DEBUG: d d's saving account(104528) is now active.
+2020-12-20 14:42: DEBUG: Saving account 104528 has been closed.
+2020-12-20 14:43: DEBUG: s s's loan (file_number: 3032) has been approved.
+2020-12-20 14:44: DEBUG: Pay off for loan 3032. Total amortized balance is 1000.
+2020-12-20 14:44: DEBUG: Loan 3032 has been closed.
+2020-12-20 14:46: DEBUG: m d's checking account(122636) is now active.
+2020-12-20 14:47: DEBUG: Deposit for account 122636. Balance is 1000.
+2020-12-20 14:47: DEBUG: a a's checking account(186997) is now active.
+2020-12-20 14:47: DEBUG: Checking account 122636 has been closed.
+2020-12-20 14:49: DEBUG: Insufficient funds for withdrawal for account 186997.
+2020-12-20 14:49: DEBUG: f h's checking account(170566) is now active.
+2020-12-20 14:49: DEBUG: Checking account 186997 has been closed.
+2020-12-20 14:51: DEBUG: a k's checking account(102697) is now active.
+2020-12-20 14:51: DEBUG: Checking account 102697 has been closed.
+2020-12-20 14:52: DEBUG: d d's saving account(146617) is now active.
+2020-12-20 14:52: DEBUG: Deposit for account 146617. Balance is 100.
+2020-12-20 14:52: DEBUG: a a's saving account(171198) is now active.
+2020-12-20 14:52: DEBUG: Saving account 146617 has been closed.
+2020-12-20 14:53: DEBUG: Insufficient funds for withdrawal for account 171198.
+2020-12-20 14:53: DEBUG: d k's saving account(123266) is now active.
+2020-12-20 14:53: DEBUG: Saving account 171198 has been closed.
+2020-12-20 14:53: DEBUG: Accrual is done for account 123266. Balance is 0.0.
+2020-12-20 14:55: DEBUG: w w's saving account(149786) is now active.
+2020-12-20 14:55: DEBUG: Saving account 123266 has been closed.
+2020-12-20 14:55: DEBUG: Saving account 149786 has been closed.
+2020-12-20 14:55: DEBUG: k h's credit card (4234567890126635) is now active.
+2020-12-20 14:55: DEBUG: Pay off for credit card 4234567890126635. Current balance is -200.
+2020-12-20 14:56: DEBUG: a a's credit card (4234567890125444) is now active.
+2020-12-20 14:56: DEBUG: Credit card 4234567890126635 has been closed.
+2020-12-20 14:57: DEBUG: Purchase on credit card 4234567890125444. New balance is 500.
+2020-12-20 14:57: DEBUG: d 's credit card (4234567890125239) is now active.
+2020-12-20 14:57: DEBUG: Credit card 4234567890125444 has been closed.
+2020-12-20 14:57: DEBUG: Credit card 4234567890125239 has been closed.
+2020-12-20 15:26: DEBUG: d d's checking account(150239) is now active.
+2020-12-20 15:26: DEBUG: Deposit for account 150239. Balance is 200.
+2020-12-20 15:26: DEBUG: Insufficient funds for withdrawal for account 150239.
+2020-12-20 15:26: DEBUG: Withdrawal for account 150239. New balance is 100.
+2020-12-20 15:26: DEBUG: Checking account 150239 has been closed.
+2020-12-20 15:28: DEBUG: d d's checking account(160551) is now active.
+2020-12-20 15:28: DEBUG: Deposit for account 160551. Balance is 11.
+2020-12-20 15:28: DEBUG: Withdrawal for account 160551. New balance is 6.
+2020-12-20 15:28: DEBUG: Checking account 160551 has been closed.
+2020-12-20 17:56: DEBUG: d d's checking account(175437) is now active.
+2020-12-20 17:56: DEBUG: Checking account 175437 has been closed.
+2020-12-20 18:05: DEBUG: d d's credit card (4234567890126662) is now active.
+2020-12-20 18:05: DEBUG: Pay off for credit card 4234567890126662. Current balance is -200.
+2020-12-20 18:05: DEBUG: Purchase on credit card 4234567890126662. New balance is 50.
+2020-12-20 18:05: DEBUG: d d's loan (file_number: 4800) has been approved.
+2020-12-20 18:06: DEBUG: Pay off for loan 4800. Total amortized balance is 2200.
+2020-12-20 18:07: DEBUG: d d's saving account(134835) is now active.
+2020-12-20 18:16: DEBUG: d d's checking account(143973) is now active.
+2020-12-20 18:18: DEBUG: d d's loan (file_number: 3942) has been approved.
+2020-12-20 18:20: DEBUG: m d's credit card (4234567890126470) is now active.
+2020-12-20 18:59: DEBUG: a b's credit card (4234567890126131) is now active.

@@ -12,7 +12,7 @@ handlers:
     formatter: simple
   file:
     class: logging.FileHandler
-    filename: '..\\logs\\check.log'
+    filename: 'logs\check.log'
     formatter: extended
 loggers:
   __main__:

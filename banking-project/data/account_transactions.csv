@@ -1,0 +1,14 @@
+index,account_number,transaction_type,amount
+0,112486,Credit,500
+1,134022,Credit,1200
+2,155602,Credit,1000
+3,124765,Credit,1256
+4,130586,Credit,100
+5,149022,Credit,345
+6,122636,Credit,1000
+7,146617,Credit,100
+8,123266,Credit,0.0
+9,150239,Credit,200
+10,150239,Debit,-100
+11,160551,Credit,11
+12,160551,Debit,-5
