@@ -109,7 +109,6 @@ class Person:
     @address.setter
     def address(self, new_address):
         self._address = new_address
-        logger.debug(f'{self._fullname}\'s address has been set.')
 
 
 class Customer(Person):
