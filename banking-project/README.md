@@ -36,9 +36,11 @@ Example entries for credit_card.csv are shown below:
 
 **Calling credit card methods on credit_card_instance:**
 
-***credit_card_instance.pay_off(amount: Int)*** (Decreases credit_card_instance's balance attribute by 'amount'.)
-***credit_card_instance.purchase(amount: Int)*** (Increases credit_card_instance's balance attribute by 'amount'.)
-***del credit_card_instance*** (Deletes credit_card_instance and removes the related entry from credit_card.csv.)
+***credit_card_instance.pay_off(amount: Int)*** (Decreases credit_card_instance's balance attribute by 'amount'.) 
+
+***credit_card_instance.purchase(amount: Int)*** (Increases credit_card_instance's balance attribute by 'amount'.) 
+
+***del credit_card_instance*** (Deletes credit_card_instance and removes the related entry from credit_card.csv.) 
 
 If 'pay_off' or 'purchase' methods of credit card class are used, the transaction data is saved to **[credit_card_transactions.csv](data/credit_card_transactions.csv)**.
 Example entries for credit_card_transactions.csv are shown below:
