@@ -2,7 +2,7 @@
 
 ## Introduction
 
-> This program mimics the core services of a bank: Checking Accounts, Saving Accounts, Credit Cards and Loans. For each of these services program captures the data and records to csv files in **[data](data)** folder.
+>  The Banking program code **[banking.py](banking.py)** resides in the main project folder.  The program mimics the core services of a bank: Checking Accounts, Saving Accounts, Credit Cards and Loans. For each of these services program captures the data and records to csv files in **[data](data)** folder.
 
 ## Part One: UML
 

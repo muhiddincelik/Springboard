@@ -397,31 +397,38 @@ class Loan(Customer):
 
 
 if __name__ == '__main__':
+    '''Driver code is designed to get inputs from the user to interact with the program.'''
+
     print('WELCOME TO XYZ BANKING INC!')
-    while True:
-        print('''What kind of service are you interested in now?
+    while True:  # Enabling user to be able to return to main menu
+
+        # Main Menu Items
+        print('''What kind of service are you interested in now? 
             1 - Open a Checking Account
             2 - Open a Saving Account
             3 - Get a Loan
             4 - Get a Credit Card
             5 - Exit''')
 
-        selection = input('Please enter the number code of the service you want to get: ')
+        selection = input('Please enter the number code of the service you want to get: ')  # Main Menu User Input
         try:
-            if selection == '1':
+            if selection == '1':   # Creating a Checking Account
                 input_ssn = int(input('Please enter your ssn: '))
                 input_first_name = input('Please enter your first name: ')
                 input_last_name = input('Please enter your last name: ')
                 input_address = input('Please enter your address: ')
                 c = Checking(input_ssn, input_first_name, input_last_name, input_address)
-                while True:
+
+                while True:  # Enables user to stay in checking account sub-menu after getting a service
                     print('''Which service do you want to get for your checking account?
                         11 - Deposit to Your Checking Account
                         12 - Withdraw from Your Checking Account
                         13 - Close Your Checking Account
                         14 - Return to Main Menu''')
+
                     checking_sub_selection = input('Please enter the number code of the service you want to get: ')
-                    if checking_sub_selection == '11':
+
+                    if checking_sub_selection == '11':  # deposit method will be called
                         checking_deposit_amount = input('Please enter the amount you want to deposit: ')
                         try:
                             c.deposit(int(checking_deposit_amount))
@@ -429,7 +436,7 @@ if __name__ == '__main__':
                         except ValueError:
                             print('Invalid selection!')
                             continue
-                    elif checking_sub_selection == '12':
+                    elif checking_sub_selection == '12':   # withdraw method will be called
                         checking_withdraw_amount = input('Please enter the amount you want to withdraw: ')
                         try:
                             c.withdraw(int(checking_withdraw_amount))
@@ -437,29 +444,33 @@ if __name__ == '__main__':
                         except ValueError:
                             print('Invalid selection!')
                             continue
-                    elif checking_sub_selection == '13':
+                    elif checking_sub_selection == '13':   # del method will be called
                         del c
                         break
-                    elif checking_sub_selection == '14':
+                    elif checking_sub_selection == '14':  # Returns to Main Menu
                         break
                     else:
                         print('Invalid selection!')
                     continue
-            elif selection == '2':
+
+            elif selection == '2':  # Creating a Saving Account
                 input_ssn = int(input('Please enter your ssn: '))
                 input_first_name = input('Please enter your first name: ')
                 input_last_name = input('Please enter your last name: ')
                 input_address = input('Please enter your address: ')
                 s = Saving(input_ssn, input_first_name, input_last_name, input_address)
-                while True:
+
+                while True:  # Enables user to stay in saving account sub-menu after getting a service
                     print('''Which service do you want to get for your saving account?
                         21 - Deposit to Your Saving Account
                         22 - Withdraw from Your Saving Account
                         23 - Calculate interest for Your Savings
                         24 - Close Your Saving Account
                         25 - Return to Main Menu''')
+
                     saving_sub_selection = input('Please enter the number code of the service you want to get: ')
-                    if saving_sub_selection == '21':
+
+                    if saving_sub_selection == '21':  # deposit method will be called
                         saving_deposit_amount = input('Please enter the amount you want to deposit: ')
                         try:
                             s.deposit(int(saving_deposit_amount))
@@ -467,7 +478,7 @@ if __name__ == '__main__':
                         except ValueError:
                             print('Invalid selection!')
                             continue
-                    elif saving_sub_selection == '22':
+                    elif saving_sub_selection == '22':  # withdraw method will be called
                         saving_withdraw_amount = input('Please enter the amount you want to withdraw: ')
                         try:
                             s.withdraw(int(saving_withdraw_amount))
@@ -475,33 +486,38 @@ if __name__ == '__main__':
                         except ValueError:
                             print('Invalid selection!')
                             continue
-                    elif saving_sub_selection == '23':
+                    elif saving_sub_selection == '23':  # accrue_interest method will be called
                         s.accrue_interest()
-                    elif saving_sub_selection == '24':
+                    elif saving_sub_selection == '24':  # del method will be called
                         del s
                         break
-                    elif saving_sub_selection == '25':
+                    elif saving_sub_selection == '25':  # Returns to Main Menu
                         break
                     else:
                         print('Invalid selection!')
                     continue
-            elif selection == '3':
+
+            elif selection == '3':  # Creating a Loan
                 input_ssn = int(input('Please enter your ssn: '))
                 input_first_name = input('Please enter your first name: ')
                 input_last_name = input('Please enter your last name: ')
                 input_address = input('Please enter your address: ')
                 input_loan_amount = input('Please enter the loan amount you want to get: ')
+
                 try:
                     input_loan_amount = int(input_loan_amount)
                 except ValueError:
                     print('Invalid loan amount')
                 loan = Loan(input_ssn, input_first_name, input_last_name, input_address, input_loan_amount)
-                while True:
+
+                while True:  # Enables user to stay in loan sub-menu after getting a service
                     print('''Which service do you want to get for your loan?
                         31 - Make payment for your loan!
                         32 - Return to Main Menu''')
+
                     loan_sub_selection = input('Please enter the number code of the service you want to get: ')
-                    if loan_sub_selection == '31':
+
+                    if loan_sub_selection == '31':  # pay_off method will be called
                         saving_payment_amount = input('Please enter the amount you want to pay: ')
                         try:
                             loan.pay_off(int(saving_payment_amount))
@@ -509,31 +525,36 @@ if __name__ == '__main__':
                         except ValueError:
                             print('Invalid selection!')
                             continue
-                    elif loan_sub_selection == '32':
+                    elif loan_sub_selection == '32':  # Returns to Main Menu
                         break
                     else:
                         print('Invalid selection!')
                     continue
-            elif selection == '4':
+            elif selection == '4':  # Creating a Credit Card
                 input_ssn = int(input('Please enter your ssn: '))
                 input_first_name = input('Please enter your first name: ')
                 input_last_name = input('Please enter your last name: ')
                 input_address = input('Please enter your address: ')
                 input_limit = input('Please enter desired limit: ')
+
                 try:
                     input_limit = int(input_limit)
                 except ValueError:
                     print('Invalid limit')
                     continue
+
                 cc = CreditCard(input_ssn, input_first_name, input_last_name, input_address, input_limit)
-                while True:
+
+                while True:  # Enables user to stay in credit card sub-menu after getting a service
                     print('''Which service do you want to get for your credit card?
                         41 - Make Payment to Your Credit Card
                         42 - Make Purchase With Your Credit Card
                         43 - Close Your Credit Card
                         44 - Return to Main Menu''')
+
                     credit_card_sub_selection = input('Please enter the number code of the service you want to get: ')
-                    if credit_card_sub_selection == '41':
+
+                    if credit_card_sub_selection == '41':  # pay_off method will be called.
                         credit_card_payment_amount = input('Please enter the amount you want to pay: ')
                         try:
                             credit_card_payment_amount = int(credit_card_payment_amount)
@@ -542,7 +563,8 @@ if __name__ == '__main__':
                             continue
                         cc.pay_off(credit_card_payment_amount)
                         continue
-                    elif credit_card_sub_selection == '42':
+
+                    elif credit_card_sub_selection == '42':  # purchase method will be called.
                         credit_card_purchase_amount = input('Please enter the amount you want to purchase: ')
                         try:
                             cc.purchase(int(credit_card_purchase_amount))
@@ -550,17 +572,24 @@ if __name__ == '__main__':
                         except ValueError:
                             print('Invalid selection!')
                             continue
-                    elif credit_card_sub_selection == '43':
+
+                    elif credit_card_sub_selection == '43':  # del method will be called.
                         del cc
                         break
-                    elif credit_card_sub_selection == '44':
+
+                    elif credit_card_sub_selection == '44':  # Returns to Main Menu
                         break
+
                     else:
                         print('Invalid selection!')
                     continue
-            elif selection == '5':
+
+            elif selection == '5':  # Exits the program
                 sys.exit()
+
             else:
                 print('Invalid selection!')
+
         except ValueError:
             print('Invalid selection!')
+

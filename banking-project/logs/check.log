@@ -243,3 +243,7 @@
 2020-12-20 23:42: DEBUG: Loan 4888 has been closed.
 2020-12-20 23:44: DEBUG: Tubi Zengo's credit card (4234567890126711) is now active.
 2020-12-20 23:44: DEBUG: Pay off for credit card 4234567890126711. Current balance is -200.
+2020-12-21 17:41: DEBUG: m g's loan (file_number: 3334) has been approved.
+2020-12-21 17:41: DEBUG: Pay off for loan 3334. Total amortized balance is 50.
+2020-12-21 17:41: DEBUG: Pay off for loan 3334. Total amortized balance is 200.
+2020-12-21 17:41: DEBUG: Loan 3334 has been closed.
