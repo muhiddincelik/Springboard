@@ -16,7 +16,7 @@ Examples to show initializing class objects and using methods if applicable.
 
 **Creating an employee instance:**
 
-	***employee_instance = Employee(ssn: int, first_name: str, last_name: str, address: str)***
+	employee_instance = Employee(ssn: int, first_name: str, last_name: str, address: str)
 
 **Note:** SSN argument should be an int with 9 digits and it should not had been used to create an employee instance before in the program.
 
@@ -34,7 +34,7 @@ Currently, the employee class doesn't have any methods.
 
 **Creating a checking account instance:**
 
-	***checking_account_instance = Checking(ssn: int, first_name: str, last_name: str, address: str)***
+	checking_account_instance = Checking(ssn: int, first_name: str, last_name: str, address: str)
 
 **Note:** SSN argument should be an int with 9 digits and it should not had been used to create a checking account instance before in the program.
 
@@ -48,11 +48,11 @@ Example entries for checking.csv are shown below:
 
 **Calling checking account class methods on checking_account_instance:**
 
-	***checking_account_instance.withdraw(amount: Int)*** (Decreases checking_account_instance's balance attribute by 'amount'.) 
+	checking_account_instance.withdraw(amount: Int) -> (Decreases checking_account_instance's balance attribute by 'amount'.) 
 
-	***checking_account_instance.deposit(amount: Int)*** (Increases checking_account_instance's balance attribute by 'amount'.) 
+	checking_account_instance.deposit(amount: Int) -> (Increases checking_account_instance's balance attribute by 'amount'.) 
 	
-	***del checking_account_instance*** (Deletes checking_account_instance and removes the related entry from checking.csv.) 
+	del checking_account_instance -> (Deletes checking_account_instance and removes the related entry from checking.csv.) 
 
 If 'deposit' or 'withdraw' methods of saving class are used, the transaction data is saved to **[account_transactions.csv](data/account_transactions.csv)**.
 Example entries for account_transactions.csv are shown below:
@@ -67,7 +67,7 @@ Example entries for account_transactions.csv are shown below:
 
 **Creating a saving account instance:**
 
-	***saving_account_instance = Saving(ssn: int, first_name: str, last_name: str, address: str)***
+	saving_account_instance = Saving(ssn: int, first_name: str, last_name: str, address: str)
 
 **Note:** SSN argument should be an int with 9 digits and it should not had been used to create a saving account instance before in the program.
 
@@ -81,13 +81,13 @@ Example entries for saving.csv are shown below:
 
 **Calling saving account class methods on saving_account_instance:**
 
-	***saving_account_instance.withdraw(amount: Int)*** (Decreases saving_account_instance's balance attribute by 'amount'.) 
+	saving_account_instance.withdraw(amount: Int) -> (Decreases saving_account_instance's balance attribute by 'amount'.) 
 
-	***saving_account_instance.deposit(amount: Int)*** (Increases saving_account_instance's balance attribute by 'amount'.) 
+	saving_account_instance.deposit(amount: Int) -> (Increases saving_account_instance's balance attribute by 'amount'.) 
 	
-	***saving_account_instance.accrue_interest()*** (Increases saving_account_instance's balance attribute by 'balance' x 0.01.) 
+	saving_account_instance.accrue_interest() -> (Increases saving_account_instance's balance attribute by 'balance' x 0.01.) 
 	
-	***del saving_account_instance*** (Deletes saving_account_instance and removes the related entry from saving.csv.) 
+	del saving_account_instance -> (Deletes saving_account_instance and removes the related entry from saving.csv.) 
 
 If 'deposit', 'withdraw' or 'accrue_interest' methods of saving class are used, the transaction data is saved to **[account_transactions.csv](data/account_transactions.csv)**.
 Example entries for account_transactions.csv are shown below:
@@ -101,7 +101,7 @@ Example entries for account_transactions.csv are shown below:
 
 **Creating a credit card instance:**
 
-	***credit_card_instance = CreditCard(ssn: int, first_name: str, last_name: str, address: str, limit: int)***
+	credit_card_instance = CreditCard(ssn: int, first_name: str, last_name: str, address: str, limit: int)
 
 **Note:** SSN argument should be an int with 9 digits and it should not had been used to create a creadit card instance before in the program.
 
@@ -115,11 +115,11 @@ Example entries for credit_card.csv are shown below:
 
 **Calling credit card class methods on credit_card_instance:**
 
-	***credit_card_instance.pay_off(amount: Int)*** (Decreases credit_card_instance's balance attribute by 'amount'.) 
+	credit_card_instance.pay_off(amount: Int) -> (Decreases credit_card_instance's balance attribute by 'amount'.) 
 
-	***credit_card_instance.purchase(amount: Int)*** (Increases credit_card_instance's balance attribute by 'amount'.) 
+	credit_card_instance.purchase(amount: Int) -> (Increases credit_card_instance's balance attribute by 'amount'.) 
 
-	***del credit_card_instance*** (Deletes credit_card_instance and removes the related entry from credit_card.csv.) 
+	del credit_card_instance -> (Deletes credit_card_instance and removes the related entry from credit_card.csv.) 
 
 If 'pay_off' or 'purchase' methods of credit card class are used, the transaction data is saved to **[credit_card_transactions.csv](data/credit_card_transactions.csv)**.
 Example entries for credit_card_transactions.csv are shown below:
@@ -133,7 +133,7 @@ Example entries for credit_card_transactions.csv are shown below:
 
 **Creating a loan instance:**
 
-	***loan_instance = CreditCard(ssn: int, first_name: str, last_name: str, address: str, loan_amount: int)***
+	loan_instance = CreditCard(ssn: int, first_name: str, last_name: str, address: str, loan_amount: int)
 
 **Note:** SSN argument should be an int with 9 digits and it should not had been used to create a loan instance before in the program.
 
@@ -147,9 +147,9 @@ Example entries for loan.csv are shown below:
 
 **Calling loan class methods on loan_instance:**
 
-	***loan_instance.pay_off(amount: Int)*** 
-	(Decreases loan_instance's remaining balance attribute by 'amount' whereas increasing amortized_balance attribute by 'amount'.)
-	('amount' should be equal or less than remaining_balance of the loan_instance.)
+	loan_instance.pay_off(amount: Int) -> (Decreases loan_instance's remaining balance attribute by 'amount' whereas increasing amortized_balance attribute by 'amount'.)
+
+**Note:** 'amount' should be equal or less than remaining_balance of the loan_instance.
 
 If 'pay_off' method of loan class is used, the transaction data is saved to **[loan_transactions.csv](data/loan_transactions.csv)**. If a loan is fully paid off, del method is set to be called. Then the instance is deleted and related entry is removed from **[loan.csv](data/loan.csv)**.
 Example entries for loan_transactions.csv are shown below:
