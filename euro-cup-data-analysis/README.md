@@ -1,4 +1,4 @@
-# Data Modeling: Schema Design and Generating DDL Commands
+# Euro Cup 2016: SQL Data Analysis
 
 ## Introduction
 
