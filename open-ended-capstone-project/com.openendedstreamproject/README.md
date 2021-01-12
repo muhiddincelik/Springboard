@@ -13,21 +13,31 @@ Currently when we run [ServerLogGenerator.py](src\main\python\com.openendedstrea
 
 ### 1) event_id
 Normally we defined event_id as an UUID in the ServerLogGenerator class, but we injected some anomaly values as in the list [0, None, 'N/A'].
-![event_id](assets/images/event_id.png)
+
+
+![event_id](assets/images/event_id.png =250x)
 
 ### 2) account_id
 account_id is supposed to in the range (1,1000) as defined in the get_server_log method of the ServerLogGenerator class, but we added some anomaly values as in the list ['N/A',None,0]. Also the random integers may become floats for account_id, we also should take care of this.
-![account_id](assets/images/account_id.png)
+
+
+![account_id](assets/images/account_id.png =250x)
 
 ### 3) current_event_type
 current_event_type is supposed to be one of the values in the event type list defined in the ServerLogGenerator class, but we injected some anomaly values as in the list ['N/A',None,'---', 0].
-![event_type](assets/images/event_type.png)
+
+
+![event_type](assets/images/event_type.png =250x)
 
 ### 4) current_country
 current_country is supposed to be one of the values in the country list defined in the ServerLogGenerator class, but we injected some anomaly values as in the list ['N/A',None,'unknown', 0].
-![event_country](assets/images/event_country.png)
+
+
+![event_country](assets/images/event_country.png =250x)
 
 ### 5) event_timestamp
 event_timestamp is supposed to be one of the values in the country list defined in the ServerLogGenerator class, but we injected some anomaly values as in the list ['N/A',None,0]. Also, some records has decimal part and also some timestamps are just in date format. (YYYY/MM/DD)
-![event_timestamp](assets/images/event_timestamp.png)
+
+
+![event_timestamp](assets/images/event_timestamp.png =250x)
 
