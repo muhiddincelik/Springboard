@@ -2,7 +2,7 @@
 
 ## Design
 
-![Engineering Design](assets/images/system_design.png)
+![Engineering Design](assets/images/system_design.jpg)
 
 ## Data
 
@@ -15,29 +15,29 @@ Currently when we run [ServerLogGenerator.py](src\main\python\com.openendedstrea
 Normally we defined event_id as an UUID in the ServerLogGenerator class, but we injected some anomaly values as in the list [0, None, 'N/A'].
 
 
-![event_id](assets/images/event_id.png =250x)
+<img src="assets/images/event_id.png" alt="event_id" width="200"/>
 
 ### 2) account_id
 account_id is supposed to in the range (1,1000) as defined in the get_server_log method of the ServerLogGenerator class, but we added some anomaly values as in the list ['N/A',None,0]. Also the random integers may become floats for account_id, we also should take care of this.
 
 
-![account_id](assets/images/account_id.png =250x)
+<img src="assets/images/account_id.png" alt="account_id" width="200"/>
 
 ### 3) current_event_type
 current_event_type is supposed to be one of the values in the event type list defined in the ServerLogGenerator class, but we injected some anomaly values as in the list ['N/A',None,'---', 0].
 
 
-![event_type](assets/images/event_type.png =250x)
+<img src="assets/images/event_type.png" alt="event_type" width="200"/>
 
 ### 4) current_country
 current_country is supposed to be one of the values in the country list defined in the ServerLogGenerator class, but we injected some anomaly values as in the list ['N/A',None,'unknown', 0].
 
 
-![event_country](assets/images/event_country.png =250x)
+<img src="assets/images/event_country.png" alt="event_country" width="200"/>
 
 ### 5) event_timestamp
 event_timestamp is supposed to be one of the values in the country list defined in the ServerLogGenerator class, but we injected some anomaly values as in the list ['N/A',None,0]. Also, some records has decimal part and also some timestamps are just in date format. (YYYY/MM/DD)
 
 
-![event_timestamp](assets/images/event_timestamp.png =250x)
+<img src="assets/images/event_timestamp.png" alt="event_timestamp" width="200"/>
 
