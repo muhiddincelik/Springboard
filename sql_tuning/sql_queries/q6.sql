@@ -22,9 +22,20 @@ SELECT name FROM Student,
 			(SELECT COUNT(*) FROM Course WHERE deptId = @v8 AND crsCode IN (SELECT crsCode FROM Teaching))) as alias
 WHERE id = alias.studId;
 
+SELECT
+	s.name
+FROM student s
+	JOIN transcript t ON s.id = t.studId 
+	JOIN course c ON c.crsCode = t.crsCode
+WHERE c.deptId = @v8
+GROUP BY 1
+HAVING COUNT(t.crsCode) = (SELECT COUNT(*) FROM course WHERE deptId = @v8)
+
+
 -- ● What was the bottleneck?
 	-- Full table scan on teaching table
 -- ● How did you identify it?
 	-- I have looked into execution plan. Access type was ALL.
 -- ● What method you chose to resolve the bottleneck?
-	-- I have defined crsCode column in the teaching table as a foreign key referring to the crsCode column in the course table. 
+	-- I have defined crsCode column in the teaching table as a foreign key referring to the crsCode column in the course table.
+    -- I have replaced IN operators and subqueries with JOIN(s).

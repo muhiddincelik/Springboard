@@ -20,6 +20,14 @@ SELECT name FROM Student,
 	WHERE Transcript.crsCode = alias1.crsCode AND Transcript.semester = alias1.semester) as alias2
 WHERE Student.id = alias2.studId;
 
+SELECT
+	s.name
+FROM student s
+	JOIN transcript t1 ON s.id = t1.studId
+	JOIN teaching t2 ON  t2.crsCode = t1.crsCode AND t2.semester = t1.semester
+	JOIN professor p ON p.id = t2.profId
+WHERE p.name = @v5;
+
 -- ● What was the bottleneck?
 	-- Full table scan on profesor and teaching tables.
 -- ● How did you identify it?
@@ -28,3 +36,4 @@ WHERE Student.id = alias2.studId;
 	-- I have converted id column in the professor table into primary key.
     -- I have also added an index for the name column in the professor table.
     -- I have defined prof_id column in the teaching table as a foreign key referencing to the id column in the professor table. 
+    -- I have used JOIN(s) instead of IN and complex subqueries.
