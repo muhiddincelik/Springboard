@@ -10,13 +10,10 @@ The program is designed in OOP style. There is only one class: MySQLPython. All 
 
 Methods:
 
-	- get_db_connection(): Gets *user* and *password* info from the user input and connects to MySQL (host='localhost', port='3306'). Creates a database named **mysql_python**.
-	
-	- create_table(): creates ticket_sales table inside the mysql_python database using the table schema explained below.
-	
-	- load_third_party(): Insert the data in the [third_party_sales_1.csv](data/third_party_sales_1.csv) into the ticket_sales table.
-	
-	- query_popular_tickets(): Queries the ticket_sales table to get the most popular 3 events in the September and December 2020.
+- get_db_connection(): Gets *user* and *password* info from the user input and connects to MySQL (host='localhost', port='3306'). Creates a database named **mysql_python**.
+- create_table(): creates ticket_sales table inside the mysql_python database using the table schema explained below.
+- load_third_party(): Insert the data in the [third_party_sales_1.csv](data/third_party_sales_1.csv) into the ticket_sales table.
+- query_popular_tickets(): Queries the ticket_sales table to get the most popular 3 events in the September and December 2020.
 	
 After user provides the user name and password, the driver code will create an instance of MySQLPython class and will call all methods of the class respectively. There should be 6 rows in the ticket_sales table in the mysql_python database in the MySQL of the hosting system. The logs about the results of the methods will also be written to the screen.
 
