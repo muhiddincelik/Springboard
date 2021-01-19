@@ -18,7 +18,7 @@ Methods:
 After user provides the user name and password, the driver code will create an instance of MySQLPython class and will call all methods of the class respectively. There should be 6 rows in the ticket_sales table in the mysql_python database in the MySQL of the hosting system. The logs about the results of the methods will also be written to the screen.
 
 UML Class Diagram of the program resides in **[docs](docs)** folder, and it is also shown below:
-![UML Class Diagram for Python & MySQL Program](docs/mysql_python.jpeg)
+![UML Class Diagram for Python & MySQL Program](docs/mysql_python.jpg)
 
 
 
