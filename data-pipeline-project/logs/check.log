@@ -1,0 +1,5 @@
+2021-01-18 20:26: INFO: Connection is successful!
+2021-01-18 20:26: INFO: DATABASE mysql_python has been created!
+2021-01-18 20:26: INFO: TABLE ticket_sales has been created!
+2021-01-18 20:26: INFO: 6 rows have been inserted to the ticket_sales table.
+2021-01-18 20:26: INFO: Query is successful. 3 rows have been returned.
