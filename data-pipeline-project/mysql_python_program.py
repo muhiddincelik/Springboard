@@ -107,4 +107,3 @@ if __name__ == '__main__':
     m.create_table()
     m.load_third_party()
     m.query_popular_tickets()
-    print(type(m.connection))
