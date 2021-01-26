@@ -1,5 +1,5 @@
 from model.ServerLog import ServerLog
-
+from multiprocessing import Pool
 import random
 import uuid
 import datetime
@@ -40,4 +40,10 @@ class ServerLogGenerator(ServerLog):
 
 if __name__ == "__main__":
     s = ServerLogGenerator()
-    s.produce_log()
+    with Pool(processes=2, maxtasksperchild=1) as pool:
+        multiple_results = [pool.apply_async(
+            s.get_server_log()
+        ) for i in range(10)]
+        print('Running processes')
+        for res in multiple_results:
+            print(res)
