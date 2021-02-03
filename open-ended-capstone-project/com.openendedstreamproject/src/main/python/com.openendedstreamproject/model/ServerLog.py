@@ -8,6 +8,8 @@ class ServerLog:
         self.location_country = location_country
         self.event_timestamp = event_timestamp
 
-    def to_list(self):
-        return [self.event_id, self.account_id, self.event_type, self.location_country, self.event_timestamp]
+    def to_dict(self):
+        #return f"{self.event_id},{self.account_id},{self.event_type},{self.location_country},{self.event_timestamp}"
+        return {'event_id': self.event_id, 'account_id': self.account_id, 'event_type': self.event_type,
+                'location_country': self.location_country, 'event_timestamp': self.event_timestamp}
 
