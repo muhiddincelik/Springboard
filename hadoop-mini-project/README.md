@@ -2,12 +2,15 @@
 
 ## Introduction
 
->  The **[MapReduce scripts](mysql_python_program.py)** resides in the [src](/src) folder. [Input data](data/data.csv) is in [data](data) folder.
+>  The MapReduce scripts resides in the [src](/src) folder. [Input data](data/data.csv) is in [data](data) folder.
 
 ## HOW PROGRAM WORKS
 
 ### Input File Sample Records:
+Original csv file doesn't have headers.
 
+| id  | incident_type | vin | make   | model | year | incident_date | description					 |
+|----|---|-------------------|----------|--------|------|------------|-------------------------------|
 | 1  | I | VXIO456XLBB630221 | Nissan   | Altima | 2003 | 2002-05-08 | Initial sales from TechMotors |
 | 2  | I | INU45KIOOPA343980 | Mercedes | C300   | 2015 | 2014-01-01 | Sold from EuroMotors          |
 | 3  | A | VXIO456XLBB630221 |          |        |      | 2014-07-02 | Head on collision             |
@@ -32,6 +35,8 @@
 
 Output looks like:
 
+| vin 	| incident_type | make   | year |
+|-------------------|---|----------|------|
 | VXIO456XLBB630221 | I | Nissan   | 2003 |
 | INU45KIOOPA343980 | I | Mercedes | 2015 |
 | VXIO456XLBB630221 | A |          |      |
@@ -54,13 +59,33 @@ Output looks like:
 
 Output looks like:
 
+| vin               | incident_type | make     | year |
+|-------------------|---------------|----------|------|
+| VXIO456XLBB630221 | A             | Nissan   | 2003 |
+| VOME254OOXW344325 | A             | Mercedes | 2015 |
+| EXOA00341AB123456 | A             | Mercedes | 2016 |
+| INU45KIOOPA343980 | A             | Mercedes | 2015 |
+
 - [autoinc_mapper2.py](src/autoinc_mapper2.py): Reads lines written by the first reducer. Concatenates make and model, and returns make-model composite as key and count = 1 as the value.
 
 Output looks like:
 
+| make-year     | count |
+|---------------|-------|
+| Nissan-2003   | 1     |
+| Mercedes-2015 | 1     |
+| Mercedes-2016 | 1     |
+| Mercedes-2015 | 1     |
+
 - [autoinc_reducer2.py](src/autoinc_reducer2.py): Reads lines written by the second mapper. Groups the records by key (make-model) and returns with the aggregate count.
 
 Output looks like:
+
+| make-year     | count |
+|---------------|-------|
+| Nissan-2003   | 1     |
+| Mercedes-2015 | 2     |
+| Mercedes-2016 | 1     |
 
 
 ## TESTING
