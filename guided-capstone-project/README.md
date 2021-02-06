@@ -1,6 +1,6 @@
 # EQUITY MARKET DATA ANALYSIS
 
-![banner](assets/banner.jpg)
+![equity_market](assets/equity_market.jpg)
 
 ## STEP 1: ETL DESIGN
 
