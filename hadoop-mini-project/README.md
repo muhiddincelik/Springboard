@@ -1,5 +1,7 @@
 # HADOOP MINI PROJECT: MAPREDUCE JOBS
 
+![](docs/car.jpg)
+
 ## Introduction
 
 >  In this project, we are given a dataset with a history report of various vehicles. Our goal is to write a MapReduce program to produce a report of the total number of accidents per make and year of the car. The MapReduce scripts resides in the [src](src) folder. [Input data](data/data.csv) is in [data](data) folder.
@@ -89,7 +91,7 @@ Output looks like:
 
 
 ## TESTING
-After navigating to the inside the main folder, you can run the command below to test the scripts.
+After navigating to the inside the main folder, you can run the command chain below to test the scripts.
 
 		cat data/data.csv | python src/autoinc_mapper1.py | python src/autoinc_reducer1.py | python src/autoinc_mapper2.py | python src/autoinc_reducer2.py
 
