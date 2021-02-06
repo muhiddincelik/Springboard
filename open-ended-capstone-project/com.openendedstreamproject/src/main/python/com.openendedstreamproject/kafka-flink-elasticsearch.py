@@ -10,8 +10,8 @@ def register_transactions_source(st_env):
                    .version("universal")
                    .topic("server-logs")
                    .start_from_earliest()
-                   .property("zookeeper.connect", "host.docker.internal:2181")
-                   .property("bootstrap.servers", "host.docker.internal:9092")) \
+                   .property("zookeeper.connect", "localhost:2181")
+                   .property("bootstrap.servers", "localhost:9092")) \
         .with_format(Json()
         .fail_on_missing_field(True)
         .schema(DataTypes.ROW([
@@ -25,12 +25,7 @@ def register_transactions_source(st_env):
         .field("account_id", DataTypes.DOUBLE())
         .field("event_type", DataTypes.STRING())
         .field("location_country", DataTypes.STRING())
-        .field("event_timestamp", DataTypes.TIMESTAMP(precision=3))
-        .field("row_time", DataTypes.TIMESTAMP(precision=3))
-        .rowtime(
-        Rowtime()
-            .timestamps_from_field("event_timestamp")
-            .watermarks_periodic_bounded(60000))) \
+        .field("event_timestamp", DataTypes.TIMESTAMP(precision=3))) \
         .in_append_mode() \
         .create_temporary_table("source")
 
@@ -38,17 +33,16 @@ def register_transactions_source(st_env):
 def register_transactions_es_sink(st_env):
     st_env.connect(Elasticsearch()
                    .version("7")
-                   .host("0.0.0.0", 9200, "http")
+                   .host("localhost", 9200, "http")
                    .index("account-activity")
-                   .document_type("usage")) \
+                   ) \
         .with_schema(Schema()
                      .field("event_id", DataTypes.STRING())
                      .field("account_id", DataTypes.DOUBLE())
                      .field("event_type", DataTypes.STRING())
                      .field("location_country", DataTypes.STRING())
-                     .field("event_timestamp", DataTypes.TIMESTAMP())
-                     .field("row_time", DataTypes.TIMESTAMP())) \
-        .with_format(Json().derive_schema()).in_upsert_mode().register_table_sink("sink_elasticsearch")
+                     .field("event_timestamp", DataTypes.TIMESTAMP(precision=3))) \
+        .with_format(Json().derive_schema()).in_upsert_mode().create_temporary_table("sink_elasticsearch")
 
 
 def activities_job():
@@ -56,28 +50,28 @@ def activities_job():
     s_env.set_parallelism(1)
     s_env.set_stream_time_characteristic(TimeCharacteristic.EventTime)
 
+    s_env.add_jars("file:///C://Users//muhid//Downloads//flink-connector-kafka_2.12-1.12.1.jar",
+                   "file:///C://Users//muhid//Downloads//flink-connector-elasticsearch_2.12-1.8.3.jar")
+
+    s_env.add_classpaths("file:///C://Users//muhid//Downloads//flink-connector-kafka_2.12-1.12.1.jar",
+                         "file:///C://Users//muhid//Downloads//flink-connector-elasticsearch_2.12-1.8.3.jar")
+
     st_env = StreamTableEnvironment \
         .create(s_env, environment_settings=EnvironmentSettings
                 .new_instance()
                 .in_streaming_mode()
                 .use_blink_planner().build())
 
-    st_env.get_config().get_configuration(). \
-        set_string("pipeline.jars", "file:///C://Users//muhid//Downloads//flink-connector-kafka_2.12-1.12.1.jar;"
-                                    "file:///C://Users//muhid//Downloads//flink-connector-elasticsearch_2.12-1.8.3.jar;")
-    st_env.get_config().get_configuration(). \
-        set_string("pipeline.classpaths", "file:///C://Users//muhid//Downloads//flink-connector-kafka_2.12-1.12.1.jar;"
-                                          "file:///C://Users//muhid//Downloads//flink-connector-elasticsearch_2.12-1.8.3.jar")
-
-
     register_transactions_source(st_env)
     register_transactions_es_sink(st_env)
 
+
+    #.window(Tumble.over("10.hours").on("row_time").alias("w")) \
+
     st_env.from_path("source") \
-        .window(Tumble.over("10.hours").on("row_time").alias("w")) \
-        .group_by("location_country, w") \
+        .group_by("location_country") \
         .select("""location_country as country, 
-                   count(event_id) as count_events,
+                   count(event_id) as count_events
                    """) \
         .execute_insert("sink_elasticsearch", overwrite=True)
 

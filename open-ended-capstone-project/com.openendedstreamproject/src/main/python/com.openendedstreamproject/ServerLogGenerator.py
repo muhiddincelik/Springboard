@@ -56,9 +56,10 @@ if __name__ == "__main__":
                              json.dumps(x, cls=UUIDEncoder).encode('utf-8'))
     #
     s = ServerLogGenerator()
-    for i in range(20):
-        producer.send('server-logs', value=s.get_server_log())
+    for i in range(2000):
+        producer.send('logs', value=s.get_server_log())
         print(f'sending {i} record!')
+        time.sleep(3)
 
     # with Pool(processes=2, maxtasksperchild=1) as pool:
     #     multiple_results = [pool.apply_async(
