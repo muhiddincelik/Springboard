@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 import sys
+import logging.config
+import logging
+import yaml
 
+with open("docs\\check.logging.yml", "r") as f:
+    config = yaml.safe_load(f)
+    logging.config.dictConfig(config)
+
+logger = logging.getLogger(__name__)
 
 freq = {}
 for item in sys.stdin:
@@ -11,4 +19,6 @@ for item in sys.stdin:
 
 for key, value in freq.items():
     print(key, value)
+
+logger.info('Second Reducing has been completed successfully.')
 

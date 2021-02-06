@@ -1,0 +1,32 @@
+version: 1
+
+formatters:
+  simple:
+    format: "%(message)s"
+  extended:
+    format: "%(asctime)s: %(levelname)s: %(message)s"
+    datefmt: '%Y-%m-%d %H:%M'
+handlers:
+  console:
+    class : logging.StreamHandler
+    formatter: simple
+  file:
+    class: logging.FileHandler
+    filename: 'logs\check.log'
+    formatter: extended
+loggers:
+  __main__:
+    level: DEBUG
+    handlers: [file]
+  autoinc_mapper1:
+    level: INFO
+    handlers: [file]
+  autoinc_mapper2:
+    level: INFO
+    handlers: [file]
+  autoinc_reducer1:
+    level: INFO
+    handlers: [file]
+  autoinc_reducer2:
+    level: INFO
+    handlers: [file]

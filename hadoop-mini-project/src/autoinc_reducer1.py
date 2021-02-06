@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 import sys
+import logging.config
+import logging
+import yaml
+
+with open("docs\\check.logging.yml", "r") as f:
+    config = yaml.safe_load(f)
+    logging.config.dictConfig(config)
+
+logger = logging.getLogger(__name__)
 
 vins = []
 updated = []
@@ -19,4 +28,6 @@ for line in sys.stdin:
 vins.extend(updated)
 vins = [' '.join(vin) for vin in vins if vin[1] == 'A']
 for vin in vins:
-    print(vin)
+    print(vin, end='')
+
+logger.info('First Reducing has been completed successfully.')
