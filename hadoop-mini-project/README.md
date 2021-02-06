@@ -2,7 +2,7 @@
 
 ## Introduction
 
->  The MapReduce scripts resides in the [src](/src) folder. [Input data](data/data.csv) is in [data](data) folder.
+>  In this project, we are given a dataset with a history report of various vehicles. Our goal is to write a MapReduce program to produce a report of the total number of accidents per make and year of the car. The MapReduce scripts resides in the [src](src) folder. [Input data](data/data.csv) is in [data](data) folder.
 
 ## HOW PROGRAM WORKS
 
