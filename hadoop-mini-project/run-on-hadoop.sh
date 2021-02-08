@@ -1,11 +1,2 @@
-hadoop jar /usr/local/hadoop/contrib/streaming/hadoop-*streaming*.jar \
--file src/autoinc_mapper1.py -mapper autoinc_mapper1.py \
--file src/autoinc_reducer1.py -reducer autoinc_reducer1.py \
--input input/data.csv -output output/all_accidents
-
-hadoop jar /usr/local/hadoop/contrib/streaming/hadoop-*streaming*.jar \
--file src/autoinc_mapper2.py -mapper autoinc_mapper2.py \
--file src/autoinc_reducer2.py -reducer autoinc_reducer2.py \
--input output/all_accidents -output output/make_year_count
-
-
+#!/bin/bash
+hadoop jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-streaming.jar -files /home/muhiddin/hadoop-mini-project/src/autoinc_mapper1.py,/home/muhiddin/hadoop-mini-project/src/autoinc_reducer1.py -mapper "python autoinc_mapper1.py" -reducer "python autoinc_reducer1.py" -input /input_files/data.csv -output /output_files11/all_accidents && hadoop jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-streaming.jar -files /home/muhiddin/hadoop-mini-project/src/autoinc_mapper2.py,/home/muhiddin/hadoop-mini-project/src/autoinc_reducer2.py -mapper "python autoinc_mapper2.py" -reducer "python autoinc_reducer2.py" -input /output_files11/all_accidents -output /output11/make_year_count

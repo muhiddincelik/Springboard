@@ -33,9 +33,11 @@ Original csv file doesn't have headers.
 
 ### Steps:
 
-- [autoinc_mapper1.py](src/autoinc_mapper1.py): Reads lines from the stdin and writes lines to stdout after selecting vin as key and (incident type, make, year) as the value.
+**Note:** Python scripts are written for Python 2.7 since Azure HDInsight Hadoop cluster had Python 2.7 version. Be sure to have appropriate Python version in the hadoop environment. 
 
-Output looks like:
+**1) [autoinc_mapper1.py](src/autoinc_mapper1.py)**: Reads lines from the stdin and writes lines to stdout after selecting vin as key and (incident type, make, year) as the value.
+
+Output looks like (not sorted version here):
 
 | vin 	| incident_type | make   | year |
 |-------------------|---|----------|------|
@@ -57,9 +59,9 @@ Output looks like:
 | INU45KIOOPA343980 | A |          |      |
 
 
-- [autoinc_reducer1.py](src/autoinc_reducer1.py): Reads lines written by the first mapper, fills the null cells for make and model and returns only lines with incident type 'A' (accident).
+**2) [autoinc_reducer1.py](src/autoinc_reducer1.py)**: Reads lines written by the first mapper, fills the null cells for make and model and returns only lines with incident type 'A' (accident).
 
-Output looks like:
+Output looks like (not sorted version here):
 
 | vin               | incident_type | make     | year |
 |-------------------|---------------|----------|------|
@@ -68,9 +70,9 @@ Output looks like:
 | EXOA00341AB123456 | A             | Mercedes | 2016 |
 | INU45KIOOPA343980 | A             | Mercedes | 2015 |
 
-- [autoinc_mapper2.py](src/autoinc_mapper2.py): Reads lines written by the first reducer. Concatenates make and model, and returns make-model composite as key and count = 1 as the value.
+**3) [autoinc_mapper2.py](src/autoinc_mapper2.py)**: Reads lines written by the first reducer. Concatenates make and model, and returns make-model composite as key and count = 1 as the value.
 
-Output looks like:
+Output looks like (not sorted version here):
 
 | make-year     | count |
 |---------------|-------|
@@ -79,7 +81,7 @@ Output looks like:
 | Mercedes-2016 | 1     |
 | Mercedes-2015 | 1     |
 
-- [autoinc_reducer2.py](src/autoinc_reducer2.py): Reads lines written by the second mapper. Groups the records by key (make-model) and returns with the aggregate count.
+**4) [autoinc_reducer2.py](src/autoinc_reducer2.py)**: Reads lines written by the second mapper. Groups the records by key (make-model) and returns with the aggregate count.
 
 Output looks like:
 
@@ -93,11 +95,16 @@ Output looks like:
 ## TESTING
 After navigating to the inside the main folder, you can run the command chain below to test the scripts.
 
-		cat data/data.csv | python src/autoinc_mapper1.py | python src/autoinc_reducer1.py | python src/autoinc_mapper2.py | python src/autoinc_reducer2.py
+		cat data/data.csv | python src/autoinc_mapper1.py | sort | python src/autoinc_reducer1.py | python src/autoinc_mapper2.py | sort | python src/autoinc_reducer2.py
 
 ## RUNNING ON HADOOP
 
-In a hadoop cluster, you can run [run-on-hadoop.sh](run-on-hadoop.sh) to run MapReduce jobs on parallel. You can edit the jar location and file locations in this bash file if the folder structure is different in the hdfs.
+In a hadoop cluster, you need to copy [Input data](data/data.csv) into hadoop cluster and yield the hdfs path of the input file into the hadoop jar command as '-input' argument. You can edit [run-on-hadoop.sh](run-on-hadoop.sh) to update input_file path and then you can run it. Also make sure required read and write permissions are available for the scripts, input and output directories and files. Since backslashes caused errors I couldn't split the lines. Also be aware of that we connect two hadoop jar commands with '&&', which implies second job will be run if the first job completes successfully.
+
+After jobs are successfully run you can check final output path to view output files:
+
+![Output](docs/output.jpg)
+
 
 ## LOGGING
 
