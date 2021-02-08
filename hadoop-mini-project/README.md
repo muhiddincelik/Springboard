@@ -59,16 +59,16 @@ Output looks like (not sorted version here):
 | INU45KIOOPA343980 | A |          |      |
 
 
-**2) [autoinc_reducer1.py](src/autoinc_reducer1.py)**: Reads lines written by the first mapper, fills the null cells for make and model and returns only lines with incident type 'A' (accident).
+**2) [autoinc_reducer1.py](src/autoinc_reducer1.py)**: Reads lines written by the first mapper, fills the null cells for make and model and returns one line (vin, make, year) per accident per vin number.
 
 Output looks like (not sorted version here):
 
-| vin               | incident_type | make     | year |
-|-------------------|---------------|----------|------|
-| VXIO456XLBB630221 | A             | Nissan   | 2003 |
-| VOME254OOXW344325 | A             | Mercedes | 2015 |
-| EXOA00341AB123456 | A             | Mercedes | 2016 |
-| INU45KIOOPA343980 | A             | Mercedes | 2015 |
+| vin               | make     | year |
+|-------------------|----------|------|
+| VXIO456XLBB630221 | Nissan   | 2003 |
+| VOME254OOXW344325 | Mercedes | 2015 |
+| EXOA00341AB123456 | Mercedes | 2016 |
+| INU45KIOOPA343980 | Mercedes | 2015 |
 
 **3) [autoinc_mapper2.py](src/autoinc_mapper2.py)**: Reads lines written by the first reducer. Concatenates make and model, and returns make-model composite as key and count = 1 as the value.
 
@@ -99,7 +99,7 @@ After navigating to the inside the main folder, you can run the command chain be
 
 ## RUNNING ON HADOOP
 
-In a hadoop cluster, you need to copy [Input data](data/data.csv) into hadoop cluster and yield the hdfs path of the input file into the hadoop jar command as '-input' argument. You can edit [run-on-hadoop.sh](run-on-hadoop.sh) to update input_file path and then you can run it. Also make sure required read and write permissions are available for the scripts, input and output directories and files. Since backslashes caused errors I couldn't split the lines. Also be aware of that we connect two hadoop jar commands with '&&', which implies second job will be run if the first job completes successfully.
+In a hadoop cluster, you need to copy [input data](data/data.csv) into hadoop cluster and yield the hdfs path of the input file into the hadoop jar command as '-input' argument. You can edit [run-on-hadoop.sh](run-on-hadoop.sh) to update input_file path and then you can run it. Also make sure required read and write permissions are available for the scripts, input and output directories and files. Since backslashes caused errors I couldn't split the lines. Also be aware of that we connect two hadoop jar commands with '&&', which implies second job will be run if the first job completes successfully.
 
 After jobs are successfully run you can check final output path to view output files:
 
