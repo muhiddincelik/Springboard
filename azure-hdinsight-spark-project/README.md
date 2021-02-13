@@ -4,7 +4,7 @@
 
 ## Introduction
 
->  In this project, I have tried to get hands-on experience with Apache Spark for Azure HDInsight. After provisioning a Spark cluster, I have used the Microsoft Azure Storage Explorer to the Jupyter Notebook exercise file and the stock file (csv) to the cluster. Then I have used the notebook to explore and analyze [Walmart stock data](data/walmart_stock.csv). 
+>  In this project, I have tried to get hands-on experience with Apache Spark for Azure HDInsight. After provisioning a Spark cluster, I have used the Microsoft Azure Storage Explorer to upload the Jupyter Notebook exercise file and the stock file (csv) to the cluster. Then I have used the notebook to explore and analyze [Walmart stock data](data/walmart_stock.csv). 
 
 
 ### STEP 1: Creating HDInsight Spark Cluster on Azure
