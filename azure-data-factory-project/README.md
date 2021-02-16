@@ -10,7 +10,7 @@
 
 #### QUESTION 1: Why should one use Azure Key Vault when working in the Azure environment? What are the pros and cons? What are the alternatives? ####
 
-Azure Key Vault encrypts keys and small secrets like passwords that use keys stored in hardware security modules (HSMs) and we don’t need to provision, configure, patch, and maintain HSMs and key management software. Key Vault quickly scales to meet the cryptographic needs of cloud applications and match peak demand, without the cost of deploying dedicated HSMs. One of the cons may be the extra work needed to create linked services and to configure and store the secrets in the Key Vault. 
+Azure Key Vault encrypts keys and small secrets like passwords that use keys stored in hardware security modules (HSMs) and we don’t need to provision, configure, patch, and maintain HSMs and key management software. Key Vault quickly scales to meet the cryptographic needs of cloud applications and match peak demand, without the cost of deploying dedicated HSMs. One of the cons may be the extra work needed to create linked services and to configure and store the secrets in the Key Vault. Storing keys in a file in the storage or database is an extremely unsecure alternative. 
 
 #### QUESTION 2: How do you achieve loop functionality within a Azure Data Factory pipeline? Why would you need to use this functionality in a data pipeline? ####
 
