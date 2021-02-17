@@ -9,7 +9,7 @@
 ## EVALUATING PERFORMANCE
 
 ### Without Broadcast and Adaptive Query
-When I run the script on Databricks, I have seen that there was no room for optimization since the data is smaller than 10 MB, broadcast is automatically deployed and suprisingly adaptive query execution was also enabled although as far as I know adaptive query execution is disabled default. Anyway let's disable both adaptive query execution and broadcast to simulate having a large dataset without adaptive query execution and run the script.
+When I run the script on Databricks, I have seen that there was no room for optimization since the data is smaller than 10 MB, broadcast is automatically deployed. In addition, suprisingly adaptive query execution was also enabled although the adaptive query execution is disabled by default as far as I know. Anyway let's disable both adaptive query execution and broadcast to simulate having a large dataset without adaptive query execution and run the script.
 
 		spark.conf.set("spark.sql.adaptive.enabled", "false")
 		spark.conf.set("spark.sql.autoBroadcastJoinThreshold", "-1")
@@ -22,7 +22,7 @@ Let's look into the stages and tasks:
 
 Let's enable the related settings again:
 
-		spark.conf.set("spark.sql.adaptive.enabled", "false")
+		spark.conf.set("spark.sql.adaptive.enabled", "true")
 		spark.conf.set("spark.sql.autoBroadcastJoinThreshold", "10485760")
 		
 When I run the script, I have also explicitly called broadcast on answersDF.
@@ -34,7 +34,7 @@ Let's look into the stages and tasks:
 
 <kbd> <img src="images/broadcast.jpg" /> </kbd>
 
-We can change broadcast threshold if there will be no memory issues ta gain better performance. (Default is 10 MB)
+We can change the broadcast threshold if there will be no memory issues to gain better performance. (Default is 10 MB)
 
 		# Setting broadcast threshold as 100MB
 		spark.conf.set("spark.sql.autoBroadcastJoinThreshold", "104857600")
