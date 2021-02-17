@@ -8,7 +8,7 @@
 
 ## HOW PROGRAM WORKS
 
-### Creating a schema for the csv input table:
+### 1) Creating a schema for the csv input table:
 Original csv file doesn't have headers.
 
 		schema = StructType([
@@ -21,7 +21,7 @@ Original csv file doesn't have headers.
 			StructField("incident_date", StringType(), True),
 			StructField("description", StringType(), True)])
 
-### Importing the csv file with the schema above
+### 2) Importing the csv file with the schema above
 
 		sales = spark.read.format('csv') \
 			.option("header", False) \
@@ -29,7 +29,10 @@ Original csv file doesn't have headers.
 			.schema(schema) \
 			.load("data/data.csv")
 
-### Extract make and model info per vin group using Window and filter the rows with the incident_type 'A' and select only make and model columns
+### 3) Filling out missing info
+- Extract make and model info per vin group using Window
+- Filter the rows with the incident_type 'A'
+- Select only make and model columns
 
 		windowSpec = Window.partitionBy("vin").orderBy("vin")
 		sales = sales.withColumn("make2", max("make").over(windowSpec)) \
@@ -48,7 +51,7 @@ Output looks like:
 | Mercedes | 2016 |
 
 
-### Counting records per make-year pair:
+### 4) Counting records per make-year pair:
 Apply mapping to convert each row into tuple(make-year, 1), then apply reduceByKey to aggregate the count per make-year pair. Then we convert rdd to dataframe and write it as csv file.
 
 		report_df = sales.rdd.map(lambda x: tuple([x["make"] + '-' + str(x["year"]), 1]))\
