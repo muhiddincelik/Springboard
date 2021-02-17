@@ -52,7 +52,10 @@ Output looks like:
 
 
 ### 4) Counting records per make-year pair:
-Apply mapping to convert each row into tuple(make-year, 1), then apply reduceByKey to aggregate the count per make-year pair. Then we convert rdd to dataframe and write it as csv file.
+- Mapping the lambda function to convert each row into tuple(make-year, 1)
+- Apply reduceByKey to aggregate the count per make-year pair
+- Convert the resulting rdd to dataframe
+- Write the dataframe as a csv file
 
 		report_df = sales.rdd.map(lambda x: tuple([x["make"] + '-' + str(x["year"]), 1]))\
                      .reduceByKey(lambda x, y: x+y)\
@@ -76,7 +79,7 @@ After navigating to the inside the main folder, you can run the following comman
 
 ## OUTPUT FILE
 
-You can check the command line execution logs in the [execution log file](logs/execution_log.txt). After jobs are successfully run you can check the [output](output) folder in the main project structure to view output csv files.
+You can check the command line execution logs in the [execution log file](logs/execution_log.txt). After the script are successfully run, you will find the [output](output) folder in the main project structure to view output csv files.
 
 I have run the script on Databricks:
 ![Output](docs/output.jpg)
