@@ -13,27 +13,27 @@ I have defined the 'partition' field as non-nullable whereas others as nullable 
 
 		# Create a common output schema to apply when writing out the dataframes
 		output_schema = StructType([StructField('trade_dt', DateType(), False),
-								   StructField('rec_type', StringType(), False),
-								   StructField('symbol', StringType(), False),
-								   StructField('exchange', StringType(), False),
-								   StructField('execution_id', StringType(), True),
-								   StructField('event_tm', TimestampType(), False),
-								   StructField('event_seq_nb', IntegerType(), False),
-								   StructField('arrival_tm', TimestampType(), False),
-								   StructField('trade_pr', DecimalType(7, 3), True),
-								   StructField('trade_size', IntegerType(), True),
-								   StructField('bid_pr', DecimalType(7, 3), True),
-								   StructField('bid_size', IntegerType(), True),
-								   StructField('ask_pr', DecimalType(7, 3), True),
-								   StructField('ask_size', IntegerType(), True),
-								   StructField('partition', StringType(), False),
-								   StructField('bad_line', StringType(), True)])
+						StructField('rec_type', StringType(), False),
+						StructField('symbol', StringType(), False),
+						StructField('exchange', StringType(), False),
+						StructField('execution_id', StringType(), True),
+						StructField('event_tm', TimestampType(), False),
+						StructField('event_seq_nb', IntegerType(), False),
+						StructField('arrival_tm', TimestampType(), False),
+						StructField('trade_pr', DecimalType(7, 3), True),
+						StructField('trade_size', IntegerType(), True),
+						StructField('bid_pr', DecimalType(7, 3), True),
+						StructField('bid_size', IntegerType(), True),
+						StructField('ask_pr', DecimalType(7, 3), True),
+						StructField('ask_size', IntegerType(), True),
+						StructField('partition', StringType(), False),
+						StructField('bad_line', StringType(), True)])
 	
 #### PARSING CSV FILE
 I have created a function to parse the csv file line by line and enforce the expected data types and check the event_type values. If a line(row) doesn't fit to the expected profile it is marked as bad record("B") in the partition field. You can look into the [csv_parser.py](src/csv_parser.py) here in detail.
 
 #### PARSING JSON FILE
-I have created another function to parse the json file line by line and enforce the expected data types and check the event_type values. If a line(row) doesn't fit to the expected profile it is marked as bad record("B") in the partition field. Here I have assumed that each json record has all field names as in the common schema but may not have values depending on the type of the event. You can look into the [json_parser.py]here (src/json_parser.py) in detail.
+I have created another function to parse the json file line by line and enforce the expected data types and check the event_type values. If a line(row) doesn't fit to the expected profile it is marked as bad record("B") in the partition field. Here I have assumed that each json record has all field names as in the common schema but may not have values depending on the type of the event. You can look into the [json_parser.py](src/json_parser.py) here in detail.
 
 #### DATA INGESTION FRAMEWORK
 We read the both csv and json input files as text files. We call the parsing functions inside the map function before converting them into dataframes.
