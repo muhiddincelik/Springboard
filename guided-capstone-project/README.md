@@ -58,7 +58,7 @@ Ingest json data:
 As you can see above, we write out the dataframes by enabling partition based on 'partition' column.
 
 **Partition field** possible values:
-1) **E**: Exchange Record
+1) **Q**: Quote Record
 2) **T**: Trade Record
 3) **B**: Bad Record Regardless of the Event Type
 
@@ -66,4 +66,50 @@ Output directory looks like:
 
 <kbd> <img src="images/output.jpg" /> </kbd>
 
+## STEP 3: END-OF-DAY (EOD) DATA LOAD
+Now that we’ve preprocessed the incoming data from the exchange, we need to create the final data format to store.
 
+#### 1) Read Trade and Quote Partition Dataset From Their Temporary Location ####
+
+		trade_common = spark.read.parquet("../output/partition=T")
+		
+		quote_common = spark.read.parquet("../output/partition=Q")
+		
+#### 2) Select The Necessary Columns For Trade and Quote Dataframes ###
+
+		trade_df = trade_common.select("trade_dt", "symbol", "exchange", "execution_id", "event_tm", "event_seq_nb",
+                               "arrival_tm", "trade_pr", "trade_size")
+		
+		quote_df = quote_common.select("trade_dt", "symbol", "exchange", "event_tm", "event_seq_nb",
+                               "arrival_tm", "bid_pr", "bid_size", "ask_pr", "ask_size")
+							   
+#### 3) Create Window Specs and Apply Them to Retrieve the Records With The Latest Arrival Time ####
+
+		trade_window = Window.partitionBy(col("trade_dt"), col("symbol"), col("exchange"), col("event_tm"), col("event_seq_nb"),
+                                col("execution_id")).orderBy(col("arrival_tm").desc())
+		
+		trade_df = trade_df.withColumn("row_number", row_number().over(trade_window))
+		
+		trade_df = trade_df.where(col("row_number") == 1).drop(col("row_number")) 		# Drop the unnecessary row_number column 
+								
+		quote_window = Window.partitionBy(col("trade_dt"), col("symbol"), col("exchange"), col("event_tm"), col("event_seq_nb"))\
+                   .orderBy(col("arrival_tm").desc())
+				   
+		quote_df = quote_df.withColumn("row_number", row_number().over(quote_window))
+		
+		quote_df = quote_df.where(col("row_number") == 1).drop(col("row_number"))
+		
+#### 4) Write Out The Dataframes ####
+
+		# Define a EOD date to use when writing Trade and Quote dataframes
+		eod_date = d.today().date()
+		
+		# Write the cleaned Quote dataframe as parquet file
+		trade_df.write.parquet("../output/trade/trade_dt={}" .format(eod_date))
+		
+		# Write the cleaned Quote dataframe as parquet file
+		quote_df.write.parquet("../output/quote/quote_dt={}".format(eod_date))
+		
+		
+		
+	

@@ -23,8 +23,8 @@ def parse_json(line):
         res.append(int(records["ask_size"]) if records["ask_size"] else None)
         if res[1] == 'T':            # check whether it is a trade record
             res.extend(['T', ''])
-        elif res[1] == 'E':          # check whether it is an exchange record
-            res.extend(['E', ''])
+        elif res[1] == 'Q':          # check whether it is a quote record
+            res.extend(['Q', ''])
         else:
             raise ValueError         # if there is an invalid event type, raise an error to catch it as bad record below
         return res

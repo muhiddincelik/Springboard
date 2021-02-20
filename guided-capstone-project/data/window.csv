@@ -1,0 +1,5 @@
+﻿trade_dt,rec_type,symbol,exchange,execution_id,event_tm,event_seq_nb,arrival_tm,trade_pr,trade_size,bid_pr,bid_size,ask_pr,ask_size
+1-1-2020,T,ABC,Dollar,sdjhsdf234,1-1-2020 6:00,101,1-1-2020 16:01,45.2,10,,,,
+1-1-2020,T,ABC,Dollar,sdjhsdf234,1-1-2020 6:00,101,1-1-2020 16:02,45.2,10,,,,
+1-1-2020,T,DES,Euro,asdasd243,1-1-2020 8:00,103,1-1-2020 16:01,17.3,2,,,,
+1-1-2020,T,DES,Euro,asdasd243,1-1-2020 8:00,103,1-1-2020 16:02,17.3,2,,,,

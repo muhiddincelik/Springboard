@@ -37,11 +37,11 @@ output_schema = StructType([StructField('trade_dt', DateType(), True),
 raw = spark.sparkContext.textFile("../data/data.csv")
 parsed_csv = raw.map(lambda line: csv_parser.parse_csv(line))
 csv_df = spark.createDataFrame(parsed_csv, schema=output_schema)
-csv_df.write.partitionBy("partition").mode("append").csv("../output/")
+csv_df.write.partitionBy("partition").mode("append").parquet("../output/")
 
 # Import json file, parse it and write out with the partition on append mode.
 raw = spark.sparkContext.textFile("../data/data.json")
 parsed_json = raw.map(lambda line: json_parser.parse_json(line))
 json_df = spark.createDataFrame(parsed_json, schema=output_schema)
-json_df.write.partitionBy("partition").mode("append").csv("../output/")
+json_df.write.partitionBy("partition").mode("append").parquet("../output/")
 
