@@ -90,14 +90,14 @@ Now that we’ve preprocessed the incoming data from the exchange, we need to cr
 		
 		trade_df = trade_df.withColumn("row_number", row_number().over(trade_window))
 		
-		trade_df = trade_df.where(col("row_number") == 1).drop(col("row_number")) 		# Drop the unnecessary row_number column 
+		trade_df = trade_df.where(col("row_number") == 1).drop(col("row_number")) # Drop row_number column 
 								
 		quote_window = Window.partitionBy(col("trade_dt"), col("symbol"), col("exchange"), col("event_tm"), col("event_seq_nb"))\
                    .orderBy(col("arrival_tm").desc())
 				   
 		quote_df = quote_df.withColumn("row_number", row_number().over(quote_window))
 		
-		quote_df = quote_df.where(col("row_number") == 1).drop(col("row_number"))
+		quote_df = quote_df.where(col("row_number") == 1).drop(col("row_number")) # Drop row_number column 
 		
 #### 4) Write Out The Dataframes ####
 
