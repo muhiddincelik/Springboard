@@ -141,13 +141,13 @@ Now that we have loaded the trade and quote tables with daily records, this step
 
 	# Select last moving average trade price from previous date's moving averages table
 	previous_last_pr = spark.sql("""SELECT symbol, exchange, mov_avg_pr AS last_pr
-									FROM
-									 (SELECT symbol, exchange, event_tm,	event_seq_nb, trade_pr,
-										AVG(trade_pr) OVER(PARTITION BY symbol ORDER BY event_tm
-											ROWS BETWEEN 29 PRECEDING AND CURRENT ROW) AS mov_avg_pr, 
-											RANK() OVER(PARTITION BY symbol ORDER BY event_tm DESC) AS rnk
-									 FROM previous_last_trade) prev
-									WHERE prev.rnk = 1""")
+								FROM
+								(SELECT symbol, exchange, event_tm,	event_seq_nb, trade_pr,
+									AVG(trade_pr) OVER(PARTITION BY symbol ORDER BY event_tm
+									 ROWS BETWEEN 29 PRECEDING AND CURRENT ROW) AS mov_avg_pr, 
+									 RANK() OVER(PARTITION BY symbol ORDER BY event_tm DESC) AS rnk
+								 FROM previous_last_trade) prev
+								WHERE prev.rnk = 1""")
 
 	# Create a view from previous date's last moving average trade price table
 	previous_last_pr.write.saveAsTable("previous_last_trade_pr")
@@ -160,72 +160,72 @@ Now that we have loaded the trade and quote tables with daily records, this step
 
 	# Union quote data with current_date's table of moving averages trade price on a common schema
 	quote_union_df = spark.sql("""SELECT null AS trade_dt, "T" AS rec_type, symbol, exchange, event_tm, event_seq_nb,
-									null AS bid_pr, null AS bid_size, null AS ask_pr, null AS ask_size,trade_pr, mov_avg_pr
-								FROM current_trade_moving_avg
-								UNION ALL
-								SELECT trade_dt, "Q" AS rec_type, symbol, exchange, event_tm, event_seq_nb, bid_pr,
-									bid_size,ask_pr, ask_size, null AS trade_pr, null AS mov_avg_pr
-								FROM quote_table""")
+							null AS bid_pr, null AS bid_size, null AS ask_pr, null AS ask_size,trade_pr, mov_avg_pr
+						FROM current_trade_moving_avg
+						UNION ALL
+						SELECT trade_dt, "Q" AS rec_type, symbol, exchange, event_tm, event_seq_nb, bid_pr,
+							bid_size,ask_pr, ask_size, null AS trade_pr, null AS mov_avg_pr
+						FROM quote_table""")
 
 	# Save union dataframe as a view
 	quote_union_df.createOrReplaceTempView("quote_union")
 
 	# Populate the most recent trade price and moving average trade price into quote records for current date
 	quote_union_update = spark.sql("""SELECT trade_dt, rec_type, symbol, exchange, event_tm, event_seq_nb,
-										bid_pr, bid_size,ask_pr, ask_size,
-										MAX(last_trade_pr) OVER(PARTITION BY symbol) AS last_trade_pr,
-										MAX(last_mov_pr) OVER(PARTITION BY symbol) AS last_mov_avg_pr
-									 FROM
-										(SELECT
-											*,
-											CASE WHEN rnk = 1 THEN trade_pr ELSE 0 END AS last_trade_pr,
-											CASE WHEN rnk = 1 THEN mov_avg_pr ELSE 0 END AS last_mov_pr
-										FROM
-										 (SELECT
-											*,
-											CASE WHEN trade_pr IS NULL THEN NULL
-											ELSE RANK() OVER (PARTITION BY symbol ORDER BY
-														CASE WHEN trade_pr IS NULL THEN 1
-													 ELSE 0 END, event_tm DESC)
-											END AS rnk
-										FROM quote_union))""")
+						bid_pr, bid_size,ask_pr, ask_size,
+						MAX(last_trade_pr) OVER(PARTITION BY symbol) AS last_trade_pr,
+						MAX(last_mov_pr) OVER(PARTITION BY symbol) AS last_mov_avg_pr
+						FROM
+						 (SELECT
+							*,
+							CASE WHEN rnk = 1 THEN trade_pr ELSE 0 END AS last_trade_pr,
+							CASE WHEN rnk = 1 THEN mov_avg_pr ELSE 0 END AS last_mov_pr
+						 FROM
+						 (SELECT
+							*,
+							CASE WHEN trade_pr IS NULL THEN NULL
+							ELSE RANK() OVER (PARTITION BY symbol ORDER BY
+										CASE WHEN trade_pr IS NULL THEN 1
+										ELSE 0 END, event_tm DESC)
+							END AS rnk
+						  FROM quote_union))""")
 
-		# Create a view for updated union
-		quote_union_update.createOrReplaceTempView("quote_union_update")
+	# Create a view for updated union
+	quote_union_update.createOrReplaceTempView("quote_union_update")
 
-		# Select required fields and filter by quote records.
-		quote_update = spark.sql("""SELECT trade_dt, symbol, event_tm, event_seq_nb, exchange, bid_pr,
+	# Select required fields and filter by quote records.
+	quote_update = spark.sql("""SELECT trade_dt, symbol, event_tm, event_seq_nb, exchange, bid_pr,
 									bid_size, ask_pr, ask_size, last_trade_pr, last_mov_avg_pr
 									FROM quote_union_update
 									WHERE rec_type = 'Q'""")
 
-		# Create a view from filtered quote dataframe
-		quote_update.createOrReplaceTempView("quote_update")
+	# Create a view from filtered quote dataframe
+	quote_update.createOrReplaceTempView("quote_update")
 
-		# Calculate bid price movement and ask price movement
-		quote_final = spark.sql("""
-								SELECT
-									trade_dt, symbol, event_tm, event_seq_nb, exchange, bid_pr,
-									bid_size, ask_pr, ask_size, last_trade_pr,last_mov_avg_pr,
-									bid_pr - last_pr as bid_pr_mv,
-									ask_pr - last_pr as ask_pr_mv
-								FROM (
-									 SELECT /*+ BROADCAST(p) */
-										q.*,
-										p.last_pr
-									FROM quote_update q LEFT OUTER JOIN previous_last_trade_pr p
-										ON q.symbol = p.symbol AND q.exchange = p.exchange
-									) a
-								""")
+	# Calculate bid price movement and ask price movement
+	quote_final = spark.sql("""
+							SELECT
+								trade_dt, symbol, event_tm, event_seq_nb, exchange, bid_pr,
+								bid_size, ask_pr, ask_size, last_trade_pr,last_mov_avg_pr,
+								bid_pr - last_pr as bid_pr_mv,
+								ask_pr - last_pr as ask_pr_mv
+							FROM (
+								SELECT /*+ BROADCAST(p) */
+									q.*,
+									p.last_pr
+								FROM quote_update q LEFT OUTER JOIN previous_last_trade_pr p
+									ON q.symbol = p.symbol AND q.exchange = p.exchange
+								) a
+							""")
 
-		# Write finalized dataframe as parquet file
-		quote_final.write.parquet(f"../output/quote-trade-analytical/date={current_date}")
+	# Write finalized dataframe as parquet file
+	quote_final.write.parquet(f"../output/quote-trade-analytical/date={current_date}")
 
 ## STEP 5: PIPELINE ORCHESTRATION ##
 
 
-#### 4.3) Workflows ####
-I have chained the workflows in a [bash script](/src/spark-submit.sh). It means to jump to next job, previous job needs to be completed. Here we capture current date as a system argument in the bash command. Normally we don't need to hardcode the date, but since I have limited data here I pass '2020-01-02' for all workflows.
+#### 5.1) Workflows ####
+I have chained the workflows in a [bash script](src/spark-submit.sh). It means to jump to next job, previous job needs to be completed. Here we capture current date as a system argument in the bash command. Normally we don't need to hardcode the date, but since I have limited data here I pass '2020-01-02' for all workflows.
 
 	#!/bin/bash
 	spark-submit \
@@ -243,8 +243,8 @@ I have chained the workflows in a [bash script](/src/spark-submit.sh). It means 
 	 --py-files /Users/muhid/Desktop/Springboard/guided-capstone-project/src/etl.zip \
 	analytical_etl.py 2020-01-02
 
-#### 4.3) Job Tracking ####
-I have created a [tracker class](/src/job_tracking.py) with needed methods to update job status. This class uses MySQL to store and update job status. Possible job names are: 'initial_ingestion', 'eod_load' and 'analytical_etl'.
+#### 5.2) Job Tracking ####
+I have created a [tracker class](src/job_tracking.py) with needed methods to update job status. This class uses MySQL to store and update job status. Possible job names are: 'initial_ingestion', 'eod_load' and 'analytical_etl'.
  
 Job status table contains these fields:
 - job_id(primary key): naming convention is jobname_yyyy-mm-dd
@@ -266,7 +266,7 @@ I have placed all transformation codes in the etl pipeline into a try-except blo
 	tracker = job_tracking.Tracker("analytical_etl", current_date)
 
 	# Applying try-except block for the whole script to track job status in MySQL
-	**try:**
+	try:
 		.
 		.
 		.
@@ -276,14 +276,14 @@ I have placed all transformation codes in the etl pipeline into a try-except blo
 		.
 		# Update job status accordingly in MySQL if there is no exception
 		tracker.update_job_status("success")
-	**except Exception as e:**
+	except Exception as e:
 		print(e)
 		# Update job status accordingly in MySQL if there is exception
 		tracker.update_job_status("failed")
 		
 After running all workflows sequentially, below is an example showing what we see for that day's jobs status in MySQL:
 
-<kbd><img src="mysql-job-tracker.jpg" ></kbd>
+<kbd><img src="images/mysql-job-tracker.jpg" ></kbd>
 
 
 
