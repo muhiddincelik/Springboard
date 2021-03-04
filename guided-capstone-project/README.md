@@ -69,13 +69,13 @@ Output directory looks like:
 ## STEP 3: END-OF-DAY (EOD) DATA LOAD
 Now that we’ve preprocessed the incoming data from the exchange, we need to create the final data format to store.
 
-#### 1) Read Trade and Quote Partition Dataset From Their Temporary Location ####
+#### 3.1) Read Trade and Quote Partition Dataset From Their Temporary Location ####
 
 		trade_common = spark.read.parquet("../output/partition=T")
 		
 		quote_common = spark.read.parquet("../output/partition=Q")
 		
-#### 2) Select The Necessary Columns For Trade and Quote Dataframes ###
+#### 3.2) Select The Necessary Columns For Trade and Quote Dataframes ###
 
 		trade_df = trade_common.select("trade_dt", "symbol", "exchange", "execution_id", "event_tm", "event_seq_nb",
                                "arrival_tm", "trade_pr", "trade_size")
@@ -83,7 +83,7 @@ Now that we’ve preprocessed the incoming data from the exchange, we need to cr
 		quote_df = quote_common.select("trade_dt", "symbol", "exchange", "event_tm", "event_seq_nb",
                                "arrival_tm", "bid_pr", "bid_size", "ask_pr", "ask_size")
 							   
-#### 3) Create Window Specs and Apply Them to Retrieve the Records With The Latest Arrival Time ####
+#### 3.3) Create Window Specs and Apply Them to Retrieve the Records With The Latest Arrival Time ####
 
 		trade_window = Window.partitionBy(col("trade_dt"), col("symbol"), col("exchange"), col("event_tm"), col("event_seq_nb"),
                                 col("execution_id")).orderBy(col("arrival_tm").desc())
@@ -99,7 +99,7 @@ Now that we’ve preprocessed the incoming data from the exchange, we need to cr
 		
 		quote_df = quote_df.where(col("row_number") == 1).drop(col("row_number")) # Drop row_number column 
 		
-#### 4) Write Out The Dataframes ####
+#### 3.4) Write Out The Dataframes ####
 
 		# Define a EOD date to use when writing Trade and Quote dataframes
 		eod_date = d.today().date()
@@ -110,6 +110,117 @@ Now that we’ve preprocessed the incoming data from the exchange, we need to cr
 		# Write the cleaned Quote dataframe as parquet file
 		quote_df.write.parquet("../output/quote/quote_dt={}".format(eod_date))
 		
+## STEP 4: ANALYTICAL ETL
+Now that we have loaded the trade and quote tables with daily records, this step focuses on using SparkSQL and Python to build an ETL job that calculates the following results for a given day:
+- Latest trade price before the quote.
+- Latest 30-minute moving average trade price, before the quote.
+- The bid/ask price movement from previous day’s closing price.
+
+#### 4.1) Read End-of-Day Trade Data and Calculate Moving Averages for Trade Price ####
+
+		# Read end-of-day trade data
+		df = spark.read.parquet(f"../output/trade/trade_dt={current_date}")
+
+		# Create a view of end-of-day trade dataframe
+		df.createOrReplaceTempView("current_trade_data")
+
+		# Calculate moving average trade price for last 30 minutes for each trade record
+		current_mov_avg_df = spark.sql("""SELECT symbol,exchange, event_tm, event_seq_nb, trade_pr,
+												 AVG(trade_pr) OVER(PARTITION BY symbol ORDER BY event_tm
+													ROWS BETWEEN 29 PRECEDING AND CURRENT ROW) AS mov_avg_pr 
+										  FROM current_trade_data""")
+
+		# Create a view from moving averages dataframe
+		current_mov_avg_df.write.saveAsTable("current_trade_moving_avg")
 		
+#### 4.2) Read Previous Date's End-of-Day Trade Data and Calculate Last Moving Average for Trade Price ####
+
+		# Read previous date's trade data and create a view from it
+		prev_df = spark.read.parquet(f"../output/trade/trade_dt={previous_date}")
+		prev_df.createOrReplaceTempView("previous_last_trade")
+
+		# Select last moving average trade price from previous date's moving averages table
+		previous_last_pr = spark.sql("""SELECT symbol, exchange, mov_avg_pr AS last_pr
+										FROM
+											(SELECT symbol, exchange, event_tm,	event_seq_nb, trade_pr,
+													AVG(trade_pr) OVER(PARTITION BY symbol ORDER BY event_tm
+														ROWS BETWEEN 29 PRECEDING AND CURRENT ROW) AS mov_avg_pr, 
+													RANK() OVER(PARTITION BY symbol ORDER BY event_tm DESC) AS rnk
+											 FROM previous_last_trade) prev
+										WHERE prev.rnk = 1""")
+
+		# Create a view from previous date's last moving average trade price table
+		previous_last_pr.write.saveAsTable("previous_last_trade_pr")
 		
+#### 4.3) Read Current Date's Quote Data and Make Final Transformations ####
+
+		# Read current date's quote data and save it as a view
+		quote_df = spark.read.parquet(f"../output/quote/quote_dt={current_date}")
+		quote_df.write.saveAsTable("quote_table")
+
+		# Union quote data with current_date's table of moving averages trade price on a common schema
+		quote_union_df = spark.sql("""SELECT null AS trade_dt, "T" AS rec_type, symbol, exchange, event_tm, event_seq_nb,
+											 null AS bid_pr, null AS bid_size, null AS ask_pr, null AS ask_size,trade_pr, mov_avg_pr
+									  FROM current_trade_moving_avg
+									  UNION ALL
+									  SELECT trade_dt, "Q" AS rec_type, symbol, exchange, event_tm, event_seq_nb, bid_pr,
+											 bid_size,ask_pr, ask_size, null AS trade_pr, null AS mov_avg_pr
+									  FROM quote_table""")
+
+		# Save union dataframe as a view
+		quote_union_df.createOrReplaceTempView("quote_union")
+
+		# Populate the most recent trade price and moving average trade price into quote records for current date
+		quote_union_update = spark.sql("""SELECT trade_dt, rec_type, symbol, exchange, event_tm, event_seq_nb,
+										  bid_pr, bid_size,ask_pr, ask_size,
+										  MAX(last_trade_pr) OVER(PARTITION BY symbol) AS last_trade_pr,
+										  MAX(last_mov_pr) OVER(PARTITION BY symbol) AS last_mov_avg_pr
+										  FROM
+											(SELECT
+												*,
+												CASE WHEN rnk = 1 THEN trade_pr ELSE 0 END AS last_trade_pr,
+												CASE WHEN rnk = 1 THEN mov_avg_pr ELSE 0 END AS last_mov_pr
+											 FROM
+												(SELECT
+													*,
+													CASE WHEN trade_pr IS NULL THEN NULL
+														ELSE RANK() OVER (PARTITION BY symbol ORDER BY
+																		  CASE WHEN trade_pr IS NULL THEN 1
+																		  ELSE 0 END, event_tm DESC)
+													END AS rnk
+											FROM quote_union))""")
+
+		# Create a view for updated union
+		quote_union_update.createOrReplaceTempView("quote_union_update")
+
+		# Select required fields and filter by quote records.
+		quote_update = spark.sql("""SELECT trade_dt, symbol, event_tm, event_seq_nb, exchange, bid_pr, bid_size,
+										   ask_pr, ask_size, last_trade_pr, last_mov_avg_pr
+									FROM quote_union_update
+									WHERE rec_type = 'Q'""")
+
+		# Create a view from filtered quote dataframe
+		quote_update.createOrReplaceTempView("quote_update")
+
+		# Calculate bid price movement and ask price movement
+		quote_final = spark.sql("""
+									SELECT
+										trade_dt, symbol, event_tm, event_seq_nb, exchange, bid_pr, bid_size,
+										ask_pr, ask_size, last_trade_pr,last_mov_avg_pr,
+										bid_pr - last_pr as bid_pr_mv,
+										ask_pr - last_pr as ask_pr_mv
+								   FROM (
+										SELECT /*+ BROADCAST(p) */
+											q.*,
+											p.last_pr
+										FROM quote_update q LEFT OUTER JOIN previous_last_trade_pr p
+											ON q.symbol = p.symbol AND q.exchange = p.exchange
+										) a
+								""")
+
+		# Write finalized dataframe as parquet file
+		quote_final.write.parquet(f"../output/quote-trade-analytical/date={current_date}")
+
+
+
 	

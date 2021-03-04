@@ -7,14 +7,14 @@ def parse_json(line):
     res = []
     records = json.loads(line)
     try:  # check to see whether data dtypes are as expected in the row
-        res.append(d.strptime(records["trade_dt"], '%d-%m-%Y').date())
+        res.append(d.strptime(records["trade_dt"], '%m-%d-%Y').date())
         res.append(str(records["rec_type"]))
         res.append(str(records["symbol"]))
         res.append(str(records["exchange"]))
         res.append(str(records["execution_id"]) if records["execution_id"] else None)
-        res.append(d.strptime(records["event_tm"], '%d-%m-%Y %H:%M'))
+        res.append(d.strptime(records["event_tm"], '%m-%d-%Y %H:%M'))
         res.append(int(records["event_seq_nb"]))
-        res.append(d.strptime(records["arrival_tm"], '%d-%m-%Y %H:%M'))
+        res.append(d.strptime(records["arrival_tm"], '%m-%d-%Y %H:%M'))
         res.append(decimal.Decimal(records["trade_pr"]) if records["trade_pr"] else None)
         res.append(int(records["trade_size"]) if records["trade_size"] else None)
         res.append(decimal.Decimal(records["bid_pr"]) if records["bid_pr"] else None)
