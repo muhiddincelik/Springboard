@@ -160,7 +160,7 @@ Now that we have loaded the trade and quote tables with daily records, this step
 
 	# Union quote data with current_date's table of moving averages trade price on a common schema
 	quote_union_df = spark.sql("""SELECT null AS trade_dt, "T" AS rec_type, symbol, exchange, event_tm, event_seq_nb,
-							null AS bid_pr, null AS bid_size, null AS ask_pr, null AS ask_size,trade_pr, mov_avg_pr
+						null AS bid_pr, null AS bid_size, null AS ask_pr, null AS ask_size,trade_pr, mov_avg_pr
 						FROM current_trade_moving_avg
 						UNION ALL
 						SELECT trade_dt, "Q" AS rec_type, symbol, exchange, event_tm, event_seq_nb, bid_pr,
