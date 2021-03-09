@@ -1,6 +1,6 @@
 # AIRFLOW PROJECT: STOCK MARKET DATA
 
-![bar](/images/bar.png)
+![bar](./images/bar.png)
 
 ## Introduction
 
@@ -117,7 +117,7 @@ t2 >> t4
 
 
 
-###### Graph view of a successful run is below:
+#### Graph view of a successful run is below:
 
-![bar](/images/output.png)
+![bar](./images/output.png)
 
