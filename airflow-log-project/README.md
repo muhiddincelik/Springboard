@@ -27,7 +27,7 @@ import pendulum
 ```python
 local_tz = pendulum.timezone('US/Pacific')
 
-# Date range for Yahoo Finance download current day's data
+# Date range to run at the same day of the ETL DAG
 start = datetime.now(tz=local_tz).date() - timedelta(days=0)
 end = datetime.now(tz=local_tz).date() - timedelta(days=-1)
 ```
