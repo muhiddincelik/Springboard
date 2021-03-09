@@ -8,7 +8,7 @@
 
 ## HOW WE CREATE  THE DAG
 
-### 1) Importing Necessarry Modules
+### 1) Importing Necessary Modules
 	from datetime import timedelta, datetime
 	from airflow import DAG
 	from airflow.operators.bash import BashOperator
