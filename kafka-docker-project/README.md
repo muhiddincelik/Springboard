@@ -96,7 +96,7 @@ networks:
 
 ### 3) Creating generator app
 
-We will use a random transaction generator (create_random_transaction method) inside the **[generator app]()**. Let's first create **[transactions.py](./generator/transactions.py)** for that.
+We will use a random transaction generator (create_random_transaction method) inside the **[generator app](./generator/app.py)**. Let's first create **[transactions.py](./generator/transactions.py)** for that.
 
 ```python
 # generator/transactions.py
