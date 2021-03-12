@@ -257,7 +257,7 @@ class UserSchema(ma.Schema):
         fields = ('id', 'first_name', 'last_name', 'email_name', 'password')
 
 
-# User schema
+# Planet schema
 class PlanetSchema(ma.Schema):
     class Meta:
         fields = ('planet_id', 'planet_name', 'planet_type', 'home_star', 'mass', 'radius', 'distance')
