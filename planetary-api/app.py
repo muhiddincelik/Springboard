@@ -7,6 +7,7 @@ from flask_mail import Mail, Message
 import os
 
 
+# App configuration
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'planets.db')
@@ -18,24 +19,28 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_PORT'] = 2525
 
+# Initiate required services
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 jwt = JWTManager(app)
 mail = Mail(app)
 
 
+# Function to create database
 @app.cli.command('db_create')
 def db_create():
     db.create_all()
     print('Database created.')
 
 
+# Function to create database
 @app.cli.command('db_drop')
 def db_drop():
     db.drop_all()
     print('Database dropped.')
 
 
+# Insert sample record into the database
 @app.cli.command('db_seed')
 def db_seed():
     mercury = Planet(planet_name='mercury',
@@ -59,35 +64,24 @@ def db_seed():
                    radius=3959,
                    distance=92.96e6)
 
+    # Add sample planets to db
     db.session.add(mercury)
     db.session.add(venus)
     db.session.add(earth)
 
+    # Create a User instance
     test_user = User(first_name='William',
                      last_name='Herschel',
                      email_name='wh@test.com',
                      password='wh@test.com')
 
+    # Add sample user to db
     db.session.add(test_user)
-    db.session.commit()
+    db.session.commit()  # To execute
     print('Database seeded.')
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
-
-@app.route('/super_simple')
-def super_simple():
-    return jsonify(message='Hello from the Planetary api!')
-
-
-@app.route('/not_found')
-def not_found():
-    return jsonify(message='That source was not found'), 404
-
-
+# User parameters in form
 @app.route('/parameters')
 def parameters():
     name = request.args.get('name')
@@ -98,6 +92,7 @@ def parameters():
         return jsonify(message='Welcome ' + name + ' you are old enough.')
 
 
+# User parameters in url
 @app.route('/url_variables/<name>/<age>')
 def url_variables(name, age):
     if int(age) < 18:
@@ -106,6 +101,7 @@ def url_variables(name, age):
         return jsonify(message='Welcome ' + name + ' you are old enough.')
 
 
+# Get all planets
 @app.route('/planets', methods=['GET'])
 def planets():
     planets_list = Planet.query.all()
@@ -113,6 +109,7 @@ def planets():
     return jsonify(result)
 
 
+# Register a user
 @app.route('/register', methods=['POST'])
 def register():
     email = request.form['email_name']
@@ -129,6 +126,7 @@ def register():
         return jsonify(message='User registered carefully!'), 201
 
 
+# User login
 @app.route('/login', methods=['POST'])
 def login():
     if request.is_json:
@@ -146,6 +144,7 @@ def login():
         return jsonify(message='Bad email or password!'), 401
 
 
+# Retrieve password for a user
 @app.route('/retrieve_password/<email_name>', methods=['GET'])
 def retrieve_password(email_name):
     user = User.query.filter_by(email_name=email_name).first()
@@ -159,6 +158,7 @@ def retrieve_password(email_name):
         return jsonify(message='Invalid email!'), 401
 
 
+# Get the details of a specific planet
 @app.route('/planet_details/<planet_id>', methods=["GET"])
 def planet_details(planet_id):
     planet = Planet.query.filter_by(planet_id=planet_id).first()
@@ -169,6 +169,7 @@ def planet_details(planet_id):
         return jsonify(message='This planet does not exist!'), 404
 
 
+# Adding a planet
 @app.route('/add_planet', methods=['POST'])
 @jwt_required()
 def add_planet():
@@ -195,12 +196,13 @@ def add_planet():
         return jsonify(message='You added a planet!'), 201
 
 
+# Updating a planet record
 @app.route('/update_planet', methods=['PUT'])
 @jwt_required()
 def update_planet():
     planet_id = int(request.form['planet_id'])
     planet = Planet.query.filter_by(planet_id=planet_id).first()
-    if planet:
+    if planet:  # If an existing planet
         planet.planet_name = request.form['planet_name']
         planet.planet_type = request.form['planet_type']
         planet.home_star = request.form['home_star']
@@ -214,6 +216,7 @@ def update_planet():
         return jsonify(message='That planet does not exist!'), 404
 
 
+# Removing a planet
 @app.route('/remove_planet/<planet_id>', methods=['DELETE'])
 @jwt_required()
 def remove_planet(planet_id):
@@ -226,7 +229,7 @@ def remove_planet(planet_id):
         return jsonify(message="That planet does not exist!"), 404
 
 
-# Database Models
+# User class
 class User(db.Model):
     __table_name__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -236,6 +239,7 @@ class User(db.Model):
     password = Column(String)
 
 
+# Planet class
 class Planet(db.Model):
     __table_name__ = 'planets'
     planet_id = Column(Integer, primary_key=True)
@@ -247,21 +251,25 @@ class Planet(db.Model):
     distance = Column(Float)
 
 
+# User schema
 class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'first_name', 'last_name', 'email_name', 'password')
 
 
+# User schema
 class PlanetSchema(ma.Schema):
     class Meta:
         fields = ('planet_id', 'planet_name', 'planet_type', 'home_star', 'mass', 'radius', 'distance')
 
 
+# Instantiate user and planet schema classes for single and many use cases
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
-
 planet_schema = PlanetSchema()
 planets_schema = PlanetSchema(many=True)
 
+
+# Driver code
 if __name__ == '__main__':
     app.run()
