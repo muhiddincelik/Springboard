@@ -146,10 +146,6 @@ After subscribing for that service and creating the ELK instance, we need to ssh
         workers => 1
       }
   }
-  
-```
-
-
 
 ### 5) AMAZON RDS for MySQL
 
