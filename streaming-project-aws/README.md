@@ -120,7 +120,7 @@ After subscribing for that service and creating the ELK instance, we need to ssh
   # We read from a Kafka topic as input
   input {
       kafka {
-      				# We have 2 brokers in our cluster
+      # We have 2 brokers in our cluster
               bootstrap_servers => "b-2.log.02msna.c8.kafka.us-west-2.amazonaws.com:9092,b-1.log.02msna.c8.kafka.us-west-2.amazonaws.com:9092"
               topics => ["server-logs-status"]
       }
@@ -149,7 +149,9 @@ After subscribing for that service and creating the ELK instance, we need to ssh
   
 ```
 
-### 4) AMAZON RDS for MySQL
+
+
+### 5) AMAZON RDS for MySQL
 
 We will create a Dev-Test MySQL database to avoid high costs and we will get the connection info so that we can use it in our spark_processor script and mysql connection script. When we run spark_processor script, it will call another script to create the database and user table automatically using this MySql connection information.
 
@@ -167,6 +169,8 @@ Let's run our generator script on the log generator EC2 instance. We pass broker
 python3.8 kafka_producer.py "b-2.log.02msna.c8.kafka.us-west-2.amazonaws.com:9092,b-1.log.02msna.c8.kafka.us-west-2.amazonaws.com:9092" "server-logs"
 ```
 
+
+
 #### 2) Submitting The Processor Script
 
 After we ssh into the EMR master node, we can submit our processor script. It is important to add required packages and class files in the command.
@@ -174,6 +178,8 @@ After we ssh into the EMR master node, we can submit our processor script. It is
 ```bash
 spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.1,mysql:mysql-connector-java:8.0.11 --class mysql_connect_class --py-files mysql_connect_class.py.zip,generator.zip spark_processor.py
 ```
+
+
 
 #### 3) Start the ELK services
 
@@ -190,7 +196,9 @@ sudo /opt/bitnami/ctlscript.sh restart
 sudo /opt/bitnami/ctlscript.sh stop
 ```
 
-#### 3) Verify the results
+
+
+#### 4) Verify the results
 
 * Then we can read messages in the console on our log generator instance.
 
