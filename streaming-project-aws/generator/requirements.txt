@@ -1,0 +1,2 @@
+kafka-python
+pytz==2021.1
