@@ -10,7 +10,7 @@
 
 >  In this project, we will deploy our local streaming pipeline backed by an **EC2** instance, **AWS MSK**, **AWS EMR** and **Bitnami ELK Stack** on AWS.
 >
->  What we'll build is a log generator and processor. We will generate a stream of logs on a EC2 instance and then we will use a PySpark script to process those stream of logs to categorize logs: goods, bad and suspicious using EMR. We will use data completeness together with consistency with a dimensional user table in AWS RDS (MySql) as our criteria. Let's look into our design:
+>  What we'll build is a log generator and processor. We will generate a stream of logs on a EC2 instance and then we will use a PySpark script to process those stream of logs to categorize logs as good, bad and suspicious logs using EMR. We will use data completeness together with consistency with a dimensional user table in AWS RDS (MySql) as our criteria. Let's look into our design:
 >
 >  ![bar](./assets/images/design.jpeg)
 
@@ -146,6 +146,7 @@ After subscribing for that service and creating the ELK instance, we need to ssh
         workers => 1
       }
   }
+  ```
 
 ### 5) AMAZON RDS for MySQL
 
@@ -269,6 +270,38 @@ sudo /opt/bitnami/ctlscript.sh stop
 - Read Replicas
 - Evaluating performance metrics
 
-# PART D: MONITORING DASHBOARD
+# PART D: MONITORING DASHBOARD FOR KAFKA AND EMR
 
-We can utilize existing ELK stack to process Kafka and EMR logs.
+Since we use managed services for Kafka and EMR, we can utilize CloudWatch dashboards to monitor desired metrics. It will be easier and faster to track metrics without trying to find and parse important metrics in the whole log files.
+
+#### 1) Kafka Metrics
+
+- Firstly, we need to select AWS / Kafka in the **Metrics** section in the CloudWatch.
+
+  ![](./assets/images/cw-kafka-menu0.png)
+
+- Secondly, we need to select the metrics group we are interested in.
+
+  ![](./assets/images/cw-kafka-menu.png)
+
+- Then we select the metrics we want to monitor and apply the action of **Add to Dashboard**.
+
+  ![](./assets/images/cw-kafka.png)
+
+#### 2) EMR Metrics
+
+- Firstly, we need to select EMR in the **Metrics** section in the CloudWatch.
+
+  ![](./assets/images/cw-emr-menu0.png)
+
+- Secondly, we need to select the **Job Flow Metrics**.
+
+  ![](./assets/images/cw-emr-menu.png)
+
+- Then we select the metrics for the specific job(s) that we want to monitor and apply the action of **Add to Dashboard**.
+
+  ![](./assets/images/cw-emr.png)
+
+
+
+Later we can visit our dashboards at CloudWatch Dashboards section.
