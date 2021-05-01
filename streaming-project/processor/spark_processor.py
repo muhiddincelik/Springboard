@@ -1,58 +1,76 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-from kafka import KafkaConsumer
 import mysql_connect_class
 from generator.server_log_generator import ServerLogGenerator
 import findspark
-
 
 # Utilize find spark in case mysql package not found
 findspark.add_packages('mysql:mysql-connector-java:8.0.11')
 
 # Set Kafka config
-kafka_broker_hostname = 'broker'
-kafka_consumer_port = '9092'
-kafka_broker = kafka_broker_hostname + ':' + kafka_consumer_port
-kafka_topic_input = 'server-logs'
 
-if __name__ == "__main__":
-    # Create Spark session
-    spark = SparkSession\
-        .builder\
-        .appName("CategorizeServerLogs")\
-        .getOrCreate()
+kafka_broker = "b-2.log.02msna.c8.kafka.us-west-2.amazonaws.com:9092," \
+               "b-1.log.02msna.c8.kafka.us-west-2.amazonaws.com:9092"
+kafka_topic_input = "server-logs"
 
-    # Spark session configurations
-    spark.sparkContext.setLogLevel("ERROR")
-    spark.conf.set("spark.sql.session.timeZone", "PST")
-    spark.sparkContext.addPyFile("mysql_con.py.zip")
-    spark.conf.set("spark.sql.streaming.checkpointLocation", "./checkpoint")
+# MySQL Connection Parameters
+mysql_host = 'stream-database.cp2rkjojtqyn.us-west-2.rds.amazonaws.com'
+mysql_port = '3306'
 
-    # Create a connection instance and call methods
-    m = mysql_connect_class.MySQLPython()
-    m.get_db_connection()
-    m.create_table()
-    m.create_dim_table()
 
+def get_defined_values():
     # Create a ServerLogGenerator instance to get predefined values
     s = ServerLogGenerator()
 
-    countries = s.location_country  # Pre-defined countries
-    event_types = s.event_type      # Pre-defined events
+    countries = s._location_country  # Pre-defined countries
+    event_types = s._event_type      # Pre-defined events
     devices = ["ANDROID", "IOS"]    # Pre-defined devices
+    return [countries, event_types, devices]
 
+
+def read_from_kafka(broker, topic):
     # Consume server logs from Kafka topic
-    consumer = KafkaConsumer(kafka_topic_input)
-    df = spark.readStream \
+    kafka_message = spark.readStream \
         .format("kafka") \
         .option("kafka.bootstrap.servers", kafka_broker) \
         .option("subscribe", kafka_topic_input) \
         .option("includeHeaders", "true") \
         .load()
-
     # Convert message bytes from Kafka broker into String type
-    df1 = df.selectExpr("CAST(value AS STRING) as value")
+    json_message = kafka_message.selectExpr("CAST(value AS STRING) as value")
+    return json_message
+
+
+def read_from_mysql():
+    # Read users dimensional data from MySql to use in join
+    dim_users = spark.read.format("jdbc").options(
+        url=f'jdbc:mysql://{mysql_host}:{mysql_port}/dim_users',
+        driver="com.mysql.cj.jdbc.Driver",
+        dbtable="users",
+        user="root",
+        password="root1234").load()
+
+    # Mutate df_dim_users by renaming  columns to avoid ambiguity during join
+    dim_users = dim_users.withColumn('account_id', col('account_id').cast(StringType())) \
+        .withColumnRenamed('account_id', 'account_no')\
+        .withColumnRenamed('device', 'user_device')
+    return dim_users
+
+
+def transform():
+    # Necessary inputs from other functions
+    json_message = read_from_kafka(kafka_broker, kafka_topic_input)
+    df_dim_users = read_from_mysql()
+    defined_values = get_defined_values()
+    # countries = defined_values[0]
+    # event_types = defined_values[1]
+    # devices = defined_values[2]
+    countries = ["US", "IN", "UK", "CA", "AU", "DE", "ES", "FR",
+                 "NL", "SG", "RU", "JP", "BR", "CN", "OT"]
+    event_types = ["click", "purchase", "login", "log-out", "delete-account",
+                   "create-account", "update-settings", "other"]
+    devices = ['ANDROID', 'IOS']
 
     # Define the schema to read JSON formatted data
     log_schema = StructType() \
@@ -64,7 +82,7 @@ if __name__ == "__main__":
         .add("event_timestamp", StringType())
 
     # Parse JSON data and apply the schema
-    df2 = df1.select(from_json(df1.value, schema=log_schema).alias("log_data"))
+    df2 = json_message.select(from_json(json_message.value, schema=log_schema).alias("log_data"))
 
     # Select columns with alias
     df3 = df2.select(
@@ -74,19 +92,6 @@ if __name__ == "__main__":
         col("log_data.device").alias("device"),
         col("log_data.location_country").alias("location_country"),
         col("log_data.event_timestamp").alias("event_timestamp"))
-
-    # Read users dimensional data from MySql to use in join
-    df_dim_users = spark.read.format("jdbc").options(
-        url="jdbc:mysql://localhost:3306/dimensional_database",
-        driver="com.mysql.cj.jdbc.Driver",
-        dbtable="users",
-        user="root",
-        password="root1234").load()
-
-    # Mutate df_dim_users by renaming  columns to avoid ambiguity during join
-    df_dim_users = df_dim_users.withColumn('account_id', col('account_id').cast(StringType())) \
-        .withColumnRenamed('account_id', 'account_no')\
-        .withColumnRenamed('device', 'user_device')
 
     # Join dimensional users data with streaming dataframe
     df3 = df3.join(broadcast(df_dim_users), expr('account_id = account_no AND device = user_device'), "left_outer")\
@@ -129,43 +134,74 @@ if __name__ == "__main__":
     # We can drop original device column since we created status column already
     df_final = df_final.drop(col('original_device'))
 
+    return df_final
+
+
+# THe function to use in foreachBatch
+def process_batch(batch_df, batch_id):
     # Declare jdbc properties
     db_target_properties = {"user": "root", "password": "root1234", "driver": 'com.mysql.cj.jdbc.Driver'}
 
-    # Create a function to use in foreachBatch
-    def process_batch(batch_df, batch_id):
-        batch_df.persist()  # Cache batch_df to avoid duplicate reads for each batch
+    batch_df.persist()  # Cache batch_df to avoid duplicate reads for each batch
 
-        # Write "good" logs to the MySql table we created by calling create_table on MySQLPython instance
-        batch_df.filter(batch_df.status == "good").write.jdbc(url='jdbc:mysql://localhost:3306/logs',
-                                                              table="good_logs",
-                                                              mode="append",
-                                                              properties=db_target_properties)
+    # Write "good" logs to the MySql table we created by calling create_table on MySQLPython instance
+    batch_df.filter(batch_df.status == "good").write.jdbc(url=f'jdbc:mysql://{mysql_host}:{mysql_port}/logs',
+                                                          table="good_logs",
+                                                          mode="append",
+                                                          properties=db_target_properties)
 
-        # Write "bad" logs to the MySql table we created by calling create_table on MySQLPython instance
-        batch_df.filter(batch_df.status == "bad").write.jdbc(url='jdbc:mysql://localhost:3306/logs',
-                                                             table="bad_logs",
-                                                             mode="append",
-                                                             properties=db_target_properties)
+    # Write "bad" logs to the MySql table we created by calling create_table on MySQLPython instance
+    batch_df.filter(batch_df.status == "bad").write.jdbc(url=f'jdbc:mysql://{mysql_host}:{mysql_port}/logs',
+                                                         table="bad_logs",
+                                                         mode="append",
+                                                         properties=db_target_properties)
 
-        # Write "suspicious" logs to the MySql table we created by calling create_table on MySQLPython instance
-        batch_df.filter(batch_df.status == "suspicious").write.jdbc(url='jdbc:mysql://localhost:3306/logs',
-                                                                    table="suspicious_logs",
-                                                                    mode="append",
-                                                                    properties=db_target_properties)
+    # Write "suspicious" logs to the MySql table we created by calling create_table on MySQLPython instance
+    batch_df.filter(batch_df.status == "suspicious").write.jdbc(url=f'jdbc:mysql://{mysql_host}:{mysql_port}/logs',
+                                                                table="suspicious_logs",
+                                                                mode="append",
+                                                                properties=db_target_properties)
 
-        # Write categorized logs into a Kafka topic
-        (batch_df.select(to_json(struct([batch_df[x] for x in batch_df.columns])).alias("value"))
-            .write
-            .format("kafka")
-            .option("kafka.bootstrap.servers", kafka_broker)
-            .option("topic", "server-logs-status")
-            .save())
+    # Write categorized logs into a Kafka topic
+    (batch_df.select(to_json(struct([batch_df[x] for x in batch_df.columns])).alias("value"))
+        .write
+        .format("kafka")
+        .option("kafka.bootstrap.servers", kafka_broker)
+        .option("topic", "server-logs-status")
+        .save())
 
-        batch_df.unpersist()  # Un-cache the batch_df after we write everything
+    batch_df.unpersist()  # Un-cache the batch_df after we write everything
 
+
+def write_stream():
+    df_to_write = transform()
     # Query to write out defined dataframes in process_batch function
-    writer = df_final.writeStream.foreachBatch(process_batch).start()
+    writer = df_to_write.writeStream.foreachBatch(process_batch).start()
 
     spark.streams.awaitAnyTermination()
+
+
+if __name__ == "__main__":
+    # Create Spark session
+    spark = SparkSession\
+        .builder\
+        .appName("CategorizeServerLogs")\
+        .getOrCreate()
+
+    # Spark session configurations
+    spark.sparkContext.setLogLevel("ERROR")
+    spark.conf.set("spark.sql.session.timeZone", "PST")
+#    spark.sparkContext.addPyFile("mysql_con.py.zip")
+    spark.conf.set("spark.sql.streaming.checkpointLocation", "./checkpoint")
+
+    # Create a connection instance and call methods to create the user database and the user table
+    m = mysql_connect_class.MySQLPython()
+    m.get_db_connection()
+    m.create_table()
+    m.create_dim_table()
+
+    # Calling this function to execute all functions in the chain and complete the work
+    write_stream()
+
+
 

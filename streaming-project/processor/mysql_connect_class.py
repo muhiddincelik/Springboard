@@ -11,7 +11,7 @@ class MySQLPython:
         try:
             self.connection = mysql.connector.connect(user='root',     # user name
                                                       password='root1234',  # password
-                                                      host='localhost',
+                                                      host='stream-database.cp2rkjojtqyn.us-west-2.rds.amazonaws.com',
                                                       port='3306')
             print("Connection is successful!")
 
@@ -21,8 +21,8 @@ class MySQLPython:
         cursor = self.connection.cursor()
         cursor.execute("DROP DATABASE IF EXISTS logs")          # Drop the logs table in case it exists
         cursor.execute("CREATE DATABASE logs")                  # Create logs database
-        cursor.execute("DROP DATABASE IF EXISTS dim_users")     # Drop the dim_users table in case it exists
-        cursor.execute("CREATE DATABASE dim_users")             # Drop the dim_users table in case it exists
+        cursor.execute("DROP DATABASE IF EXISTS dim_users")     # Drop the dim_users database in case it exists
+        cursor.execute("CREATE DATABASE dim_users")             # Create dim_users database
         print("DATABASE log has been created!")
 
         return self.connection
@@ -79,18 +79,18 @@ class MySQLPython:
     # Method to user dimension table where Spark will read the users data from
     def create_dim_table(self):
         cursor = self.connection.cursor()
-        cursor.execute("USE dim_users;")               # Ensuring to use dim_users database
-        cursor.execute("DROP TABLE IF EXISTS users;")  # Drop the users table in case it exists
+        cursor.execute("USE dim_users")               # Ensuring to use dim_users database
+        cursor.execute("DROP TABLE IF EXISTS users")  # Drop the users table in case it exists
         time.sleep(0.2)
 
         # DDL syntax to create the users table with desired fields and field types
         create_dim_query = """CREATE TABLE users (
                                 account_id VARCHAR(15),
-                                device VARCHAR(15);
+                                device VARCHAR(15)
                                 )"""
 
         # Insert some sample data into users table
-        insert_users = """INSERT INTO (users)
+        insert_users = """INSERT INTO users (account_id, device)
                         VALUES
                         ("1", "ANDROID"),
                         ("2", "ANDROID"),

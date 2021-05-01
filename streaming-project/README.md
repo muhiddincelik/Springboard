@@ -30,7 +30,7 @@
 
 ## PART A: Infrastructure
 
-### 1) Requirements
+#### 1) Requirements
 
 * Install Java 8
 
@@ -46,7 +46,7 @@
 * Install MySQL
 * We need modules in [requirements.txt](./generator/requirements.txt) installed for our python execution environment.
 
-### 2) Configurations
+#### 2) Configurations
 
 + For Kafka we need to configure server.properties.
 
@@ -108,9 +108,129 @@
 
   
 
-### PART B: Execution ###
+### PART B: Testing
 
-### 1) Running The Pipeline
+We are going to use pytest and pytest-mock modules to test our main transformation function in the spark script.
+
+#### 1) Installing Packages
+
+We need to install the packages of our application. We will create the ***setup.py*** file:
+
+```python
+from setuptools import setup, find_packages
+
+setup(name="processor", packages=find_packages())
+
+```
+
+Then we will run this script to install the packages in ***develop*** mode:
+
+```bash
+python setup.py develop
+```
+
+#### 2) Creating Test Files
+
+We need to create ***[conftest.py](./tests/conftest.py)*** file so that we can use fixtures for spark and sql contexts. Naming is important for this file.
+
+```python
+import logging
+import pytest
+
+from pyspark import HiveContext
+from pyspark import SparkConf
+from pyspark import SparkContext
+from pyspark import SQLContext
+from pyspark.streaming import StreamingContext
+from pyspark import sql
+
+def quiet_py4j():
+    logger = logging.getLogger('py4j')
+    logger.setLevel(logging.WARN)
+
+
+@pytest.fixture(scope="session")
+def spark_context(request):
+    conf = (SparkConf().setMaster("local[2]").setAppName("pytest-pyspark-local-testing"))
+    request.addfinalizer(lambda: sc.stop())
+
+    sc = SparkContext(conf=conf)
+    quiet_py4j()
+    return sc
+
+@pytest.fixture(scope="session")
+def sql_context(spark_context):
+    sql_context = sql.SQLContext(spark_context)
+    return sql_context
+
+```
+
+Now we will create the test file ***[spark_test.py](./tests/spark_test.py)***. We will focus on testing the ***transform()*** function in our spark script. We will use mocker to mock the data we read from Kafka and MySQL.
+
+```python
+from processor import spark_processor as s
+from pyspark.sql import SQLContext
+from pyspark.sql.types import Row
+from pyspark import sql
+import datetime
+import pytest
+
+# Fixtures to use from conftest.py
+pytest_mark = pytest.mark.usefixtures("spark_context", "sql_context")
+
+
+def test_spark_transformation(spark_context, mocker):
+    """ test that a single log is categorized correctly
+    Args:
+        spark_context: test fixture SparkContext
+        sql_context: test fixture SqlContext
+    """
+
+    sqlContext = sql.SQLContext(spark_context)
+
+    # Mocking the log coming from Kafka
+    mocker.patch(
+        'processor.spark_processor_refactored.read_from_kafka',
+        return_value=spark_context.parallelize([Row(value='{"event_id": "141b3ff2a92111ebbfae367ddad5b1fa", '
+                                                          '"account_id": "684", "event_type": "other", '
+                                                          '"device": "ANDROID", "location_country": "FR", '
+                                                          '"event_timestamp": "1619724510"}')]).toDF()
+    )
+
+    # Mocking the connection with MySQL
+    mocker.patch(
+        'processor.spark_processor_refactored.read_from_mysql',
+        return_value=spark_context.parallelize([Row(account_no='684', user_device='ANDROID')]).toDF()
+    )
+
+    # Spark transformation result dataframe
+    result = s.transform().collect()
+
+    # Expected esult
+    expected_result = [Row(event_id='141b3ff2a92111ebbfae367ddad5b1fa', account_id=684,
+                           event_type='other', device='ANDROID', location_country='FR',
+                           event_timestamp=datetime.datetime(2021, 4, 29, 12, 28, 30), status='good')]
+
+    assert result == expected_result
+
+```
+
+#### 3) Running The Tests
+
+In our test file, we test our ***transformation*** function for a ***"good"*** log. Let's run the test:
+
+```bash
+# Command to run all tests in the project subdirectories in debug and diff mode
+pytest --pdb --vv
+```
+
+The test passes, which means our transformation function correctly categorized the server log we passed in the test file. We can add more tests files for testing ***"suspicious"*** and ***"bad"*** logs.
+
+<img src="./assets/images/test_result.png" alt="test" style="zoom:50%;" />
+
+### PART C: Execution ###
+
+#### 1) Running The Pipeline
 
 Firstly we need to source our bash profile to export paths:
 
@@ -127,7 +247,7 @@ bash run.sh
 
 
 
-### 2) Verify the results
+#### 2) Verify the results
 
 - Firstly we need to check we have the topics created, if everything is okay, we are supposed to see **server-logs** and **server-logs-status** topics. If we see server-logs-status is in the topic list, it means our spark script works.
 

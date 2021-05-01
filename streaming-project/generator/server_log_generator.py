@@ -1,4 +1,4 @@
-from server_log_class import ServerLog
+from generator.server_log_class import ServerLog
 import datetime
 import random
 import uuid
@@ -9,9 +9,9 @@ import pytz
 class ServerLogGenerator(ServerLog):
     def __init__(self):
         self._random = random.random()
-        self.location_country = ["US", "IN", "UK", "CA", "AU", "DE", "ES", "FR",
+        self._location_country = ["US", "IN", "UK", "CA", "AU", "DE", "ES", "FR",
                                  "NL", "SG", "RU", "JP", "BR", "CN", "OT"]
-        self.event_type = ["click", "purchase", "login", "log-out", "delete-account",
+        self._event_type = ["click", "purchase", "login", "log-out", "delete-account",
                            "create-account", "update-settings", "other"]
         self._columns = ['event_id', 'account_id', 'event_type', 'device', 'location_country', 'event_timestamp']
 
@@ -29,7 +29,7 @@ class ServerLogGenerator(ServerLog):
                                      random.randint(10001, 100000)],
                                     weights=[5, 0.01, 0.01, 0.01])[0]
 
-        event_type = random.choices([self.event_type[random.randint(0, len(self.event_type) - 1)],
+        event_type = random.choices([self._event_type[random.randint(0, len(self._event_type) - 1)],
                                     'N/A',
                                      None,
                                      '---',
@@ -48,7 +48,7 @@ class ServerLogGenerator(ServerLog):
                                           0],
                                          weights=[4, 0.01, 0.01, 0.01, 0.01])[0]
 
-        location_country = random.choices([self.location_country[random.randint(0, len(self.location_country) - 1)],
+        location_country = random.choices([self._location_country[random.randint(0, len(self._location_country) - 1)],
                                           'N/A',
                                            None,
                                            'unknown',
