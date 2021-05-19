@@ -1,0 +1,8 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww30220\viewh16080\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs36 \cf0 aws emr create-cluster --applications Name=Spark Name=Zeppelin --ec2-attributes '\{"KeyName":"log-generator","InstanceProfile":"EMR_EC2_DefaultRole","SubnetId":"subnet-9b39e7d1","EmrManagedSlaveSecurityGroup":"sg-0bae1e51b47ffd8f2","EmrManagedMasterSecurityGroup":"sg-0d3c3326b807f56c5"\}' --service-role EMR_DefaultRole --enable-debugging --release-label emr-5.32.0 --log-uri 's3n://aws-logs-053394950412-us-west-2/elasticmapreduce/' --name 'spark-cluster' --instance-groups '[\{"InstanceCount":1,"EbsConfiguration":\{"EbsBlockDeviceConfigs":[\{"VolumeSpecification":\{"SizeInGB":32,"VolumeType":"gp2"\},"VolumesPerInstance":2\}]\},"InstanceGroupType":"CORE","InstanceType":"c6g.xlarge","Name":"Core Instance Group"\},\{"InstanceCount":1,"EbsConfiguration":\{"EbsBlockDeviceConfigs":[\{"VolumeSpecification":\{"SizeInGB":32,"VolumeType":"gp2"\},"VolumesPerInstance":2\}]\},"InstanceGroupType":"MASTER","InstanceType":"c6g.xlarge","Name":"Master Instance Group"\}]' --configurations '[\{"Classification":"spark","Properties":\{\}\}]' --scale-down-behavior TERMINATE_AT_TASK_COMPLETION --region us-west-2}
